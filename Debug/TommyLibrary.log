@@ -1,0 +1,2 @@
+﻿  main.cpp
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\TommyTimer.h(41,14): error C4996: 'ctime': This function or variable may be unsafe. Consider using ctime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
