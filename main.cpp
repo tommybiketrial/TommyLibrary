@@ -55,3 +55,8 @@ int main() {
 }
 
 
+
+
+//TODO, implement a TICK system similar to that of CircularDependency.h
+
+//TODO then, modify arrays so that it flush data into a 2 dimensional array PER TICK.
