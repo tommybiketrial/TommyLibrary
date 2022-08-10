@@ -11,8 +11,6 @@ D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyTimer.h(156,2
           [
               _Ty=int
           ]
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(371,66): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(383,44): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
 D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(41,23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(140,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(31,66): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)

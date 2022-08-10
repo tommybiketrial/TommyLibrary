@@ -1,7 +1,7 @@
 #include <iostream>
 #include "TommyHeader.h"
 
-using TommyLogic::generateTruthtableXY; using TommyLogic::loopInputUseGate;
+using namespace TommyLogic;
 /*
 TRUTH TABLE
 
@@ -47,11 +47,9 @@ int main() {
 	obj8.input({ &obj6 });
 	obj9.input({ &obj7, &obj8 });
 
-	UseGate testgate(&obj9);
+	UseGate testgate(&obj9,123);
 
-
-
-	loopInputUseGate(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
+	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
 }
 
 
@@ -60,3 +58,66 @@ int main() {
 //TODO, implement a TICK system similar to that of CircularDependency.h
 
 //TODO then, modify arrays so that it flush data into a 2 dimensional array PER TICK.
+
+/*//Driver Code: (for CircularDependency.h)
+
+	CircularDependencyTest test(10, 0);
+
+	std::thread worker(&CircularDependencyTest::run, std::ref(test));
+
+	while (test.IsRunning) {
+		auto input = 1;
+		cin >> input;
+		if (input == 0) {
+			test.IsRunning = false;
+		}
+	}
+
+	worker.join();
+
+	test.printAllResults();
+
+*/
+
+/* //Old LogicGate Driver Code:
+* 
+* 
+
+	//TESTING RECURSIVE GATES
+	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
+
+	//LogicGate obj10("my Nand Gate"), obj11()
+
+
+
+	obj1.assignFunctions(1);//YES
+	obj2.assignFunctions(1);//YES
+	obj3.assignFunctions(3);//AND
+	obj4.assignFunctions(3);//AND
+	obj5.assignFunctions(2);//NOT
+	obj6.assignFunctions(2);//NOT
+	obj7.assignFunctions(1);//YES
+	obj8.assignFunctions(1);//YES
+	obj9.assignFunctions(1);//YES
+
+
+
+	obj3.input({ &obj1 }); // Without circular dependency
+	obj4.input({ &obj2 }); // Without circular dependency
+
+	//obj3.input({ &obj1, &obj6 }); // With circular dependency
+	//obj4.input({ &obj2, &obj5 }); // With circular dependency
+
+	obj5.input({ &obj3 });
+	obj6.input({ &obj4 });
+	obj7.input({ &obj5 });
+	obj8.input({ &obj6 });
+	obj9.input({ &obj7, &obj8 });
+
+	UseGate testgate(&obj9);
+
+
+
+	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
+
+*/

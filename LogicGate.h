@@ -11,18 +11,22 @@ struct ObjectStore {
 
 class LogicGate {
 protected:
-	vector<LogicGate*> TmpObjTree;
+
+	//vector<LogicGate*> TmpObjTree;
 
 	void recurObjFunc(ObjectStore* obj) { //Return a whole list of objects in the hierarchy instead of just the one below
 		//cout << "Object Name: " << this->Name << " | ObjList.size() = " << ObjList.size() << endl;
-		TmpObjTree.push_back(this);
+		//TmpObjTree.push_back(this);
+
 		obj->ObjTree.push_back(this);
 		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->CurrentTick = this->CurrentTick;
 			ObjList[i]->recurObjFunc(obj);
 		}
 	}
 
 private:
+
 	vector<string> ObjNames;
 
 	pair<int, int> Input = { 2,2 };
@@ -60,12 +64,17 @@ private:
 
 
 public:
+
+	int CurrentTick = 0;
+
 	vector<LogicGate*> ObjList;
 
 	string Name = "";
 	string FundamentalGateName = "";
 
 	vector<int> CalculatedOutput;
+
+	vector<vector<int>> TimedOutput = {{}};
 
 	int GotCalled = 0;
 	int GotTriggered = 0;
@@ -193,7 +202,7 @@ public:
 	void print() {
 		cout << Name; if (FundamentalGateName != "") { cout << " (" << FundamentalGateName << ")"; } cout << " // Number of Inputs: " << NumOfInputs << " // Trigger Gate Number: " << TriggerGateNum << endl;
 		cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
-		cout << Name << " Got Triggered: " << GotTriggered << endl;
+		cout << Name << " Got Triggered: " << GotTriggered << " // Tick: " << CurrentTick << endl;
 		if (Input.first == 2) {
 			if (CalculatedInputPair.first == 2) {
 				cout << "Input: N/A" << endl;
@@ -231,11 +240,15 @@ private:
 	vector<LogicGate*> CurrentObjArr;
 
 public:
-	UseGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
+	UseGate(LogicGate* ObjGate, int StartingTicks) :LogicGate(*ObjGate) {
 		Obj = ObjGate;
 		//cout << "ObjGate.ObjListSize = " << ObjGate.ObjListSize << endl;
 
 		ObjectStore objtree;
+		
+		ObjGate->CurrentTick = StartingTicks;
+		this->CurrentTick = StartingTicks;
+
 		this->recurObjFunc(&objtree);
 		CurrentObjArr = objtree.ObjTree;
 	}
@@ -339,116 +352,3 @@ public:
 		return this->Name;
 	}
 };
-
-namespace tommylogic {
-	bool vectorSizeChecker(int InputSize, vector<vector<int>> InputVector) { //Check V[i][?], the size of the row to see if it matches InputSize
-		for (int i = 0; i < InputVector.size(); i++) {
-			if (InputVector[i].size() != InputSize)return false;
-		}
-		return true;
-	}
-
-	template <typename T>
-	void printVector(vector<T> input) {
-		for (int i = 0; i < input.size(); i++) cout << input[i] << " ";
-	}
-
-	void printTruthtable(int InputSize, vector<vector<int>> TruthTableInput, vector<int> TruthTableResult) {
-		if (vectorSizeChecker(InputSize, TruthTableInput)) {
-			for (int i = 0; i < TruthTableResult.size(); i++) {
-				for (int j = 0; j < InputSize; j++) {
-					cout << TruthTableInput[i][j] << " ";
-				}
-				cout << "=> " << TruthTableResult[i] << endl;
-			}
-		}
-		else {
-			cout << "Wrong Table Input Size" << endl;
-		}
-	}
-
-	vector<vector<int>> generateTruthtableYX(int n) {
-		std::vector<std::vector<int>> output(n, std::vector<int>(1 << n));
-
-		unsigned num_to_fill = 1U << (n - 1);
-		for (unsigned col = 0; col < (size_t)n; ++col, num_to_fill >>= 1U)
-		{
-			for (unsigned row = num_to_fill; row < (1U << n); row += (num_to_fill * 2))
-			{
-				std::fill_n(&output[col][row], num_to_fill, 1);
-			}
-		}
-
-		// These loops just print out the results, nothing more.
-		for (unsigned x = 0; x < (size_t)(1 << n); ++x)
-		{
-			for (unsigned y = 0; y < (size_t)n; ++y)
-			{
-				//std::cout << output[y][x] << " ";
-			}
-			//std::cout << std::endl;
-		}
-
-		return output;
-	}
-
-	vector<vector<int>> transposeArr(vector<vector<int>> input) {
-		vector<vector<int>> output;
-		for (size_t i = 0; i < input[0].size(); i++) {
-			output.push_back({});
-			for (size_t j = 0; j < input.size(); j++) {
-				output[i].push_back(0);
-			}
-		}
-
-		for (unsigned x = 0; x < output.size(); ++x)
-		{
-			for (unsigned y = 0; y < output[x].size(); ++y)
-			{
-				output[x][y] = input[y][x];
-				//std::cout << output[x][y] << " ";
-			}
-			//std::cout << std::endl;
-		}
-		return output;
-	}
-
-	vector<vector<int>> generateTruthtableXY(int decimal_places) {
-		vector<vector<int>> output = transposeArr(generateTruthtableYX(decimal_places));
-		return output;
-	}
-
-	void loopInputUseGate(UseGate obj, vector<vector<int>> input) {
-		for (int i = 0; i < input.size(); i++) {
-			cout << "Input: ";
-			for (int j = 0; j < input[i].size(); j++) {
-				cout << input[i][j] << " , ";
-			}cout << endl;
-			obj.inputAll(input[i]);
-			obj.call();
-			obj.printResult();
-			cout << endl << "===============" << endl;
-		}
-	}
-	void loopInputUseGate(UseGate obj, vector<vector<int>> input, vector<LogicGate*> OtherGatesResults) {
-		for (int i = 0; i < input.size(); i++) {
-			obj.inputAll(input[i]);
-			obj.call();
-			cout << "Input: ";
-			for (int j = 0; j < input[i].size(); j++) {
-				cout << input[i][j] << " , ";
-			}cout << endl;
-			cout << "(" << obj.getName() << ") ";
-			obj.printResult();
-			cout << endl << "---------other gates' results--------" << endl;
-			for (int j = 0; j < OtherGatesResults.size(); j++) {
-				cout << OtherGatesResults[j]->Name << ": ";
-				for (int k = 0; k < OtherGatesResults[j]->CalculatedOutput.size(); k++) {
-					cout << OtherGatesResults[j]->CalculatedOutput[k] << " | ";
-				}
-				cout << endl;
-			}
-			cout << endl << "===============" << endl;
-		}
-	}
-}
