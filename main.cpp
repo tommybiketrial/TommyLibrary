@@ -13,43 +13,17 @@ AND----OR----NAND----NOR----XNOR----XOR
 
 */
 
-//1 YES, 2 NOT, 3 AND, 4 OR
+//1 YES, 2 NOT, 3 AND, 4 OR, 5 DELAY
 
 int main() {
-	//TESTING RECURSIVE GATES
-	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
+	CircularDependencyObj obj1(10, 10, 10, "obj1"), obj2(10, 10, 10, "obj2"), obj3(10, 10, 10, "obj3");
 
-	//LogicGate obj10("my Nand Gate"), obj11()
+	obj1.inputObj(&obj2);
+	obj2.inputObj(&obj3);
+	obj3.inputObj(&obj1);
 
+	obj1.run();
 
-
-	obj1.assignFunctions(1);//YES
-	obj2.assignFunctions(1);//YES
-	obj3.assignFunctions(3);//AND
-	obj4.assignFunctions(3);//AND
-	obj5.assignFunctions(2);//NOT
-	obj6.assignFunctions(2);//NOT
-	obj7.assignFunctions(1);//YES
-	obj8.assignFunctions(1);//YES
-	obj9.assignFunctions(1);//YES
-
-
-
-	obj3.input({ &obj1 }); // Without circular dependency
-	obj4.input({ &obj2 }); // Without circular dependency
-
-	//obj3.input({ &obj1, &obj6 }); // With circular dependency
-	//obj4.input({ &obj2, &obj5 }); // With circular dependency
-
-	obj5.input({ &obj3 });
-	obj6.input({ &obj4 });
-	obj7.input({ &obj5 });
-	obj8.input({ &obj6 });
-	obj9.input({ &obj7, &obj8 });
-
-	UseGate testgate(&obj9,123);
-
-	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
 }
 
 
@@ -61,9 +35,15 @@ int main() {
 
 /*//Driver Code: (for CircularDependency.h)
 
-	CircularDependencyTest test(10, 0);
+	int StartingTick = 10; //if StartingTick is 0, it will go on infinitely more ticks
+	int DelayInMilliseconds = 50;
+	CircularDependencyTest test(10, StartingTick, DelayInMilliseconds);
 
+	//test.run();
+	
 	std::thread worker(&CircularDependencyTest::run, std::ref(test));
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(StartingTick*DelayInMilliseconds*2));
 
 	while (test.IsRunning) {
 		auto input = 1;
@@ -74,8 +54,9 @@ int main() {
 	}
 
 	worker.join();
-
+	
 	test.printAllResults();
+	
 
 */
 
@@ -117,6 +98,46 @@ int main() {
 	UseGate testgate(&obj9);
 
 
+
+	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
+
+*/
+
+/*// NEW LOGIC GATES DRIVER CODE:
+
+	//TESTING RECURSIVE GATES
+	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
+	LogicGate objDelay("objDelay");
+	//LogicGate obj10("my Nand Gate"), obj11()
+
+
+	objDelay.assignFunctions(5);//DELAY
+	obj1.assignFunctions(1);//YES
+	obj2.assignFunctions(1);//YES
+	obj3.assignFunctions(3);//AND
+	obj4.assignFunctions(3);//AND
+	obj5.assignFunctions(2);//NOT
+	obj6.assignFunctions(2);//NOT
+	obj7.assignFunctions(1);//YES
+	obj8.assignFunctions(1);//YES
+	obj9.assignFunctions(1);//YES
+
+
+
+	//obj3.input({ &obj1 }); // Without circular dependency
+	//obj4.input({ &obj2 }); // Without circular dependency
+
+	obj3.input({ &obj1, &obj6 }); // With circular dependency
+	obj4.input({ &obj2, &objDelay }); // With circular dependency
+
+	objDelay.input({ &obj5 });
+	obj5.input({ &obj3 });
+	obj6.input({ &obj4 });
+	obj7.input({ &obj5 });
+	obj8.input({ &obj6 });
+	obj9.input({ &obj7, &obj8 });
+
+	UseGate testgate(&obj9,123);
 
 	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
 

@@ -3,22 +3,24 @@
 class CircularDependencyTest { //called by a worker thread
 private:
 
-	int Input = 0;
-
-	int CurrentTick = 0;
-
-	int A = 0, B = 0, C = 0;
+	int A = -1, B = -1, C = -1;
 
 	vector<int> StoreArrA;
 	vector<int> StoreArrB;
 	vector<int> StoreArrC;
 
 	void funcA() {
+		if (B == -1) {
+			A = -1;
+		}
 		A = B;
 		StoreArrA.push_back(A);
 	}
 
 	void funcB() {
+		if (C == -1) {
+			B = -1;
+		}
 		B = C;
 		StoreArrB.push_back(B);
 	}
@@ -27,7 +29,7 @@ private:
 
 		//delay or wait for instruction to execute (ex. from the main thread)
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(DelayMilliseconds));
 
 		C = A+2;
 
@@ -36,10 +38,14 @@ private:
 
 public:
 
+	int DelayMilliseconds = 100;
+
+	int CurrentTick = 0;
+
 	bool IsRunning = true;
 
-	CircularDependencyTest(int input, int ticks) {
-		Input = input;
+	CircularDependencyTest(int input, int ticks, int DelayDuration) {
+		B = input;
 		if (ticks == 0) {
 			CurrentTick = -9;
 		}
@@ -47,6 +53,7 @@ public:
 			CurrentTick = ticks;
 		}
 		
+		DelayMilliseconds = DelayDuration;
 	}
 
 	void run() {
@@ -58,6 +65,7 @@ public:
 				CurrentTick--;
 			}
 		}
+		IsRunning = false;
 	}
 
 	void printAllResults() { //you can call it from either threads
@@ -95,3 +103,47 @@ public:
     test.printAllResults();
 
 */
+
+class CircularDependencyObj { //Use OBJ here! with Delay and TICK!
+private:
+	int CurrentTick = 0;
+	int DelayTick = 0;
+	vector<int> StoreArr;
+	bool IsRunning = true;
+	int DelayInMilliseconds = 100;
+
+	CircularDependencyObj* obj;
+public:
+
+	string Name = "";
+
+	int Value = 0;
+
+	CircularDependencyObj(int input, int StartingTick, int delayInMilliseconds, string name) {
+		Name = name;
+		Value = input;
+		if (StartingTick == 0) {
+			CurrentTick = -9;
+		}
+		else {
+			CurrentTick = StartingTick;
+		}
+		DelayInMilliseconds = delayInMilliseconds;
+	}
+
+	void inputObj(CircularDependencyObj* input) {
+		obj = input;
+	}
+
+	void run() {
+		if (CurrentTick == 0) {
+			return;
+		}
+		else {
+			Value++;
+			cout << "Tick(" << CurrentTick << ")(" << Name << "): " << Value << endl;
+			CurrentTick--;
+			obj->run();
+		}
+	}
+};

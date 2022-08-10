@@ -52,18 +52,28 @@ private:
 		if (inputvalue.first != 0) return 0;
 		else return 1;
 	}
-	int DELAY(pair<int, int> inputvalue) { //whether it will release depending on the ticking thread
-		int store = inputvalue.first;
+	int DELAY(pair<int, int> inputvalue) { //always hold the data from input for 1 tick, then release it to output in the next tick
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		if (inputvalue.second == 1) {
-			return store;
+		cout << "sss" << endl;
+		if (DelayTick != CurrentTick - 1) {
+			DelayStore1 = inputvalue.first;
+			return 2;
 		}
-		return 2;
+		DelayStore1 = inputvalue.first;
+		DelayStore2 = DelayStore1;
+		DelayTick = CurrentTick - 1;
+
+		return DelayStore2;
 	}
 
 
 
 public:
+
+	int DelayStore1 = 2;
+	int DelayStore2 = 2;
+
+	int DelayTick = 0;
 
 	int CurrentTick = 0;
 
@@ -137,6 +147,11 @@ public:
 			TempFunc = &LogicGate::OR;
 			FundamentalGateName = "OR";
 			NumOfInputs = 2;
+			break;
+		case 5:
+			TempFunc = &LogicGate::DELAY;
+			FundamentalGateName = "DELAY";
+			NumOfInputs = 1;
 			break;
 		default:
 			cout << "WARNING: Wrong Function Assigned" << endl;
