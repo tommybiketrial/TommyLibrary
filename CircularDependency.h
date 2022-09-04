@@ -1,5 +1,90 @@
 #pragma once
 
+class TickSystem {
+public:
+
+	int Tick = 1;
+
+	int EndTick;
+
+	TickSystem(int EndTick_in) {
+		EndTick = EndTick_in;
+	}
+	TickSystem(int StartTick_in, int EndTick_in) {
+		Tick = StartTick_in;
+		EndTick = EndTick_in;
+	}
+};
+
+TickSystem Tick(9999999);
+
+class CircularDependencyTest { //called by a worker thread
+private:
+
+
+
+public:
+
+	vector<double> Output;
+
+	int OldTick = 0;
+
+	void checkTick() {
+		if (Tick.Tick == OldTick) { //Do the function
+			testtick();
+		}
+		else { //push result to array
+			Output.push_back(testrun());
+			OldTick = Tick.Tick;
+		}
+	}
+
+	int testtick() {
+		cout << "Tick!" << endl;
+		Tick.Tick++;
+		return 10;
+	}
+
+	int testrun() {
+		cout << "test" << endl;
+		return 5;
+	}
+
+	void printOutput() {
+		for (int i = 0; i < Output.size(); i++) {
+			cout << Output[i] << ", ";
+		}cout << endl;
+	}
+
+};
+
+
+
+/*//Driver Code:
+
+	CircularDependencyTest test(10, 0);
+
+    std::thread worker(&CircularDependencyTest::run, std::ref(test));
+
+    while (test.IsRunning) {
+        auto input = 1;
+        cin >> input;
+        if (input == 0) {
+            test.IsRunning = false;
+        }
+    }
+
+    worker.join();
+
+    test.printAllResults();
+
+*/
+
+
+
+/*
+#pragma once
+
 class CircularDependencyTest { //called by a worker thread
 private:
 
@@ -52,7 +137,7 @@ public:
 		else {
 			CurrentTick = ticks;
 		}
-		
+
 		DelayMilliseconds = DelayDuration;
 	}
 
@@ -84,26 +169,25 @@ public:
 	}
 };
 
-/*//Driver Code:
+/* / Driver Code :
 
-	CircularDependencyTest test(10, 0);
+CircularDependencyTest test(10, 0);
 
-    std::thread worker(&CircularDependencyTest::run, std::ref(test));
+std::thread worker(&CircularDependencyTest::run, std::ref(test));
 
-    while (test.IsRunning) {
-        auto input = 1;
-        cin >> input;
-        if (input == 0) {
-            test.IsRunning = false;
-        }
-    }
+while (test.IsRunning) {
+	auto input = 1;
+	cin >> input;
+	if (input == 0) {
+		test.IsRunning = false;
+	}
+}
 
-    worker.join();
+worker.join();
 
-    test.printAllResults();
-
+test.printAllResults();
 */
-
+/*
 class CircularDependencyObj { //Use OBJ here! with Delay and TICK!
 private:
 	int CurrentTick = 0;
@@ -147,3 +231,4 @@ public:
 		}
 	}
 };
+*/

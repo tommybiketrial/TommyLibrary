@@ -73,7 +73,7 @@ namespace TommyLogic {
 		return output;
 	}
 
-	vector<vector<int>> generateTruthtableXY(int decimal_places) {
+	vector<vector<int>> generateTruthtable(int decimal_places) {
 		vector<vector<int>> output = transposeArr(generateTruthtableYX(decimal_places));
 		return output;
 	}
@@ -100,28 +100,6 @@ namespace TommyLogic {
 			}cout << endl;
 			cout << "(" << obj.getName() << ") ";
 			obj.printResult();
-			cout << endl << "---------other gates' results--------" << endl;
-			for (int j = 0; j < OtherGatesResults.size(); j++) {
-				cout << OtherGatesResults[j]->Name << ": ";
-				for (int k = 0; k < OtherGatesResults[j]->CalculatedOutput.size(); k++) {
-					cout << OtherGatesResults[j]->CalculatedOutput[k] << " | ";
-				}
-				cout << endl;
-			}
-			cout << endl << "===============" << endl;
-		}
-	}
-	void loopInputTimed(UseGate obj, vector<vector<int>> input, vector<LogicGate*> OtherGatesResults) { //TODO make Circular Dependency possible
-		
-		for (int i = 0; i < input.size(); i++) {
-			obj.inputAll(input[i]);
-			obj.call();
-			cout << "Input: ";
-			for (int j = 0; j < input[i].size(); j++) {
-				cout << input[i][j] << " , ";
-			}cout << endl;
-			cout << "(" << obj.getName() << ") ";
-			obj.printAll();
 			cout << endl << "---------other gates' results--------" << endl;
 			for (int j = 0; j < OtherGatesResults.size(); j++) {
 				cout << OtherGatesResults[j]->Name << ": ";

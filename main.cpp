@@ -16,129 +16,47 @@ AND----OR----NAND----NOR----XNOR----XOR
 //1 YES, 2 NOT, 3 AND, 4 OR, 5 DELAY
 
 int main() {
-	CircularDependencyObj obj1(10, 10, 10, "obj1"), obj2(10, 10, 10, "obj2"), obj3(10, 10, 10, "obj3");
+	
+	//TESTING RECURSIVE GATES
+	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9");
 
-	obj1.inputObj(&obj2);
-	obj2.inputObj(&obj3);
-	obj3.inputObj(&obj1);
+	obj1.assignFunctions(1);//YES
+	obj2.assignFunctions(1);//YES
+	obj3.assignFunctions(3);//AND
+	obj4.assignFunctions(1);//NOT USED
+	obj5.assignFunctions(5);//DELAY
+	obj6.assignFunctions(1);//YES
+	obj7.assignFunctions(5);//DELAY
+	obj8.assignFunctions(5);//DELAY
+	obj9.assignFunctions(3);//AND
 
-	obj1.run();
+	obj3.input({ &obj1,&obj2 });
+	obj5.input({ &obj3 });
+	obj6.input({ &obj5 });
+	obj7.input({ &obj6 });
+	obj8.input({ &obj6 });
+	obj9.input({ &obj7,&obj8 });
+
+	obj1.input(1);
+	obj2.input(0);
+
+	obj9.call();
+
+	UseGate gate(&obj9);
+	gate.printAll();
+	gate.clear();
+
+	cout << endl << "======================" << endl << endl;
+
+	obj1.input(1);
+	obj2.input(1);
+
+	obj9.call();
+
+	gate.printAll();
+
+	SplitGate testgate(&obj9);
+	testgate.printSpecialNodes();
+
 
 }
-
-
-
-
-//TODO, implement a TICK system similar to that of CircularDependency.h
-
-//TODO then, modify arrays so that it flush data into a 2 dimensional array PER TICK.
-
-/*//Driver Code: (for CircularDependency.h)
-
-	int StartingTick = 10; //if StartingTick is 0, it will go on infinitely more ticks
-	int DelayInMilliseconds = 50;
-	CircularDependencyTest test(10, StartingTick, DelayInMilliseconds);
-
-	//test.run();
-	
-	std::thread worker(&CircularDependencyTest::run, std::ref(test));
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(StartingTick*DelayInMilliseconds*2));
-
-	while (test.IsRunning) {
-		auto input = 1;
-		cin >> input;
-		if (input == 0) {
-			test.IsRunning = false;
-		}
-	}
-
-	worker.join();
-	
-	test.printAllResults();
-	
-
-*/
-
-/* //Old LogicGate Driver Code:
-* 
-* 
-
-	//TESTING RECURSIVE GATES
-	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
-
-	//LogicGate obj10("my Nand Gate"), obj11()
-
-
-
-	obj1.assignFunctions(1);//YES
-	obj2.assignFunctions(1);//YES
-	obj3.assignFunctions(3);//AND
-	obj4.assignFunctions(3);//AND
-	obj5.assignFunctions(2);//NOT
-	obj6.assignFunctions(2);//NOT
-	obj7.assignFunctions(1);//YES
-	obj8.assignFunctions(1);//YES
-	obj9.assignFunctions(1);//YES
-
-
-
-	obj3.input({ &obj1 }); // Without circular dependency
-	obj4.input({ &obj2 }); // Without circular dependency
-
-	//obj3.input({ &obj1, &obj6 }); // With circular dependency
-	//obj4.input({ &obj2, &obj5 }); // With circular dependency
-
-	obj5.input({ &obj3 });
-	obj6.input({ &obj4 });
-	obj7.input({ &obj5 });
-	obj8.input({ &obj6 });
-	obj9.input({ &obj7, &obj8 });
-
-	UseGate testgate(&obj9);
-
-
-
-	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
-
-*/
-
-/*// NEW LOGIC GATES DRIVER CODE:
-
-	//TESTING RECURSIVE GATES
-	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
-	LogicGate objDelay("objDelay");
-	//LogicGate obj10("my Nand Gate"), obj11()
-
-
-	objDelay.assignFunctions(5);//DELAY
-	obj1.assignFunctions(1);//YES
-	obj2.assignFunctions(1);//YES
-	obj3.assignFunctions(3);//AND
-	obj4.assignFunctions(3);//AND
-	obj5.assignFunctions(2);//NOT
-	obj6.assignFunctions(2);//NOT
-	obj7.assignFunctions(1);//YES
-	obj8.assignFunctions(1);//YES
-	obj9.assignFunctions(1);//YES
-
-
-
-	//obj3.input({ &obj1 }); // Without circular dependency
-	//obj4.input({ &obj2 }); // Without circular dependency
-
-	obj3.input({ &obj1, &obj6 }); // With circular dependency
-	obj4.input({ &obj2, &objDelay }); // With circular dependency
-
-	objDelay.input({ &obj5 });
-	obj5.input({ &obj3 });
-	obj6.input({ &obj4 });
-	obj7.input({ &obj5 });
-	obj8.input({ &obj6 });
-	obj9.input({ &obj7, &obj8 });
-
-	UseGate testgate(&obj9,123);
-
-	loopInputTimed(testgate, generateTruthtableXY(2), { &obj7,&obj8 });
-
-*/

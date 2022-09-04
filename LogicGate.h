@@ -2,11 +2,12 @@
 
 class LogicGate; struct ObjectStore;
 
-//TODO remember the objects that each object called
-//in order to print a warning for circular dependency
+//TODO Split the tree to avoid circular dependency at the point of DELAY nodes.
 
 struct ObjectStore {
 	vector<LogicGate*> ObjTree;
+	vector<LogicGate*> DelayNodeArr;
+	vector<LogicGate*> InputObjArr;
 };
 
 class LogicGate {
@@ -15,14 +16,38 @@ protected:
 	//vector<LogicGate*> TmpObjTree;
 
 	void recurObjFunc(ObjectStore* obj) { //Return a whole list of objects in the hierarchy instead of just the one below
-		//cout << "Object Name: " << this->Name << " | ObjList.size() = " << ObjList.size() << endl;
-		//TmpObjTree.push_back(this);
-
+		for (int i = 0; i < obj->ObjTree.size(); i++) {//Avoid Duplicates
+			if (obj->ObjTree[i] == this) {
+				return;
+			}
+		}
 		obj->ObjTree.push_back(this);
 		for (int i = 0; i < ObjList.size(); i++) {
-			ObjList[i]->CurrentTick = this->CurrentTick;
 			ObjList[i]->recurObjFunc(obj);
 		}
+	}
+
+	void findSpecialNodes(ObjectStore* DelayNodes) { //Return a list of Delay Nodes and save it into an array		
+		for (int i = 0; i < DelayNodes->DelayNodeArr.size(); i++) {
+			if (DelayNodes->DelayNodeArr[i] == this && this->FundamentalGateName != "DELAY") {
+				cout << "Warning: Circular Dependency" << endl;
+				return;
+			}else if (DelayNodes->DelayNodeArr[i] == this && this->FundamentalGateName == "DELAY") {
+				cout << "Hit a Delay node, stopped searching" << endl;
+				return;
+			}
+		}
+		if (this->ObjList.size() == 0) {//When the Objlist of an object is 0, this object is an Input object
+			DelayNodes->InputObjArr.push_back(this);
+		}
+		//It's possible that Input node can also be Delay Node :)
+		if (this->FundamentalGateName == "DELAY") {//Save this DELAY node into array
+			DelayNodes->DelayNodeArr.push_back(this);
+		}
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->findSpecialNodes(DelayNodes);
+		}
+		return;
 	}
 
 private:
@@ -54,28 +79,13 @@ private:
 	}
 	int DELAY(pair<int, int> inputvalue) { //always hold the data from input for 1 tick, then release it to output in the next tick
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		cout << "sss" << endl;
-		if (DelayTick != CurrentTick - 1) {
-			DelayStore1 = inputvalue.first;
-			return 2;
-		}
-		DelayStore1 = inputvalue.first;
-		DelayStore2 = DelayStore1;
-		DelayTick = CurrentTick - 1;
-
-		return DelayStore2;
+		cout << "sleeping..." << endl; //FundamentalGateName = "DELAY"
+		return inputvalue.first;
 	}
 
 
 
 public:
-
-	int DelayStore1 = 2;
-	int DelayStore2 = 2;
-
-	int DelayTick = 0;
-
-	int CurrentTick = 0;
 
 	vector<LogicGate*> ObjList;
 
@@ -217,7 +227,7 @@ public:
 	void print() {
 		cout << Name; if (FundamentalGateName != "") { cout << " (" << FundamentalGateName << ")"; } cout << " // Number of Inputs: " << NumOfInputs << " // Trigger Gate Number: " << TriggerGateNum << endl;
 		cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
-		cout << Name << " Got Triggered: " << GotTriggered << " // Tick: " << CurrentTick << endl;
+		cout << Name << " Got Triggered: " << GotTriggered << endl;
 		if (Input.first == 2) {
 			if (CalculatedInputPair.first == 2) {
 				cout << "Input: N/A" << endl;
@@ -240,7 +250,7 @@ public:
 			cout << Output[i] << " ";
 		}
 		cout << endl;
-		cout << "ObjList.size() = " << this->ObjList.size() << " Object Names: " << endl;
+		cout << "ObjList.size() = " << this->ObjList.size() << " Object Names: ";
 		for (int i = 0; i < this->ObjNames.size(); i++) {
 			cout << ObjNames[i] << " ";
 		}
@@ -248,21 +258,54 @@ public:
 	}
 };
 
-class UseGate :LogicGate {
+class SplitGate :LogicGate {
+private:
+
+	LogicGate* Obj;
+
+	vector<LogicGate*> CurrentObjArr;
+
+	vector<LogicGate*> DelayNodeArr;
+	vector<LogicGate*> InputNodeArr;
+
+	vector<vector<LogicGate*>> OverallObjArr;
+
+public:
+	SplitGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
+		Obj = ObjGate;
+		cout << "ObjGate.ObjListSize = " << ObjGate->ObjListSize << endl;
+
+		ObjectStore DelayNodes;
+		this->findSpecialNodes(&DelayNodes);
+		DelayNodeArr = DelayNodes.DelayNodeArr;
+		InputNodeArr = DelayNodes.InputObjArr;
+	}
+
+	void printSpecialNodes() {
+		cout << "All Delay Nodes: ";
+		for (int i = 0; i < DelayNodeArr.size(); i++) {
+			cout << DelayNodeArr[i]->Name << " ~ ";
+		}cout << endl;
+		cout << "All Input Nodes: ";
+		for (int i = 0; i < InputNodeArr.size(); i++) {
+			cout << InputNodeArr[i]->Name << " ~ ";
+		}cout << endl;
+	}
+
+};
+
+class UseGate :LogicGate { //Only for non recursive repetitive use (truth table) //OR PRINTING
 private:
 	LogicGate* Obj;
 
 	vector<LogicGate*> CurrentObjArr;
 
 public:
-	UseGate(LogicGate* ObjGate, int StartingTicks) :LogicGate(*ObjGate) {
+	UseGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
 		Obj = ObjGate;
 		//cout << "ObjGate.ObjListSize = " << ObjGate.ObjListSize << endl;
 
 		ObjectStore objtree;
-		
-		ObjGate->CurrentTick = StartingTicks;
-		this->CurrentTick = StartingTicks;
 
 		this->recurObjFunc(&objtree);
 		CurrentObjArr = objtree.ObjTree;
@@ -279,24 +322,27 @@ public:
 		for (int i = 0; i < CurrentObjArr.size(); i++) {
 			if (CurrentObjArr[i]->ObjListSize == 0) {
 				switch (CurrentObjArr[i]->TriggerGateNum) {
-				case 1:
+				case 1: //YES
 					Counter++;
 					break;
-				case 2:
+				case 2: //NOT
 					Counter++;
 					break;
-				case 3:
+				case 3: //AND
 					Counter = Counter + 2;
 					break;
-				case 4:
+				case 4: //OR
 					Counter = Counter + 2;
+					break;
+				case 5: //DELAY
+					Counter++;
 					break;
 				default:
 					break;
 				}
 			}
 		}
-		cout << "You should input " << Counter << " number of inputs." << endl;
+		cout << "REMINDER: You should input " << Counter << " number of inputs." << endl;
 	}
 
 	void inputAll(vector<int> inputBool) {
@@ -309,26 +355,36 @@ public:
 			}
 			if (CurrentObjArr[i]->ObjListSize == 0) {
 				switch (CurrentObjArr[i]->TriggerGateNum) {
-				case 1:
+				case 1: //YES
 					CurrentObjArr[i]->input(inputBool[Counter]);
 					Counter++;
 					break;
-				case 2:
+				case 2: //NOT
 					CurrentObjArr[i]->input(inputBool[Counter]);
 					Counter++;
 					break;
-				case 3:
+				case 3: //AND
 					CurrentObjArr[i]->input(inputBool[Counter], inputBool[Counter + 1]);
 					Counter = Counter + 2;
 					break;
-				case 4:
+				case 4: //OR
 					CurrentObjArr[i]->input(inputBool[Counter], inputBool[Counter + 1]);
 					Counter = Counter + 2;
+					break;
+				case 5: //DELAY
+					CurrentObjArr[i]->input(inputBool[Counter]);
+					Counter++;
 					break;
 				default:
 					cout << "Wrong Gate Number (UseGate:LogicGate void inputAll)" << endl;
 					break;
 				}
+			}
+			if (Counter < inputBool.size()) {
+				cout << "TOO MANY INPUTS PROVIDED (UseGate:LogicGate void inputAll)" << endl;
+				cout << inputBool.size() - Counter << " number of input/s is/are neglected." << endl;
+				checkNumOfInputs();
+				return;
 			}
 		}
 	}
@@ -357,6 +413,10 @@ public:
 		for (int i = 0; i < Obj->CalculatedOutput.size(); i++) {
 			cout << Obj->CalculatedOutput[i] << " | ";
 		}
+	}
+
+	vector<int> getResult() {
+		return Obj->CalculatedOutput;
 	}
 
 	void clear() {
