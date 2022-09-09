@@ -8,6 +8,12 @@ struct ObjectStore {
 	vector<LogicGate*> ObjTree;
 	vector<LogicGate*> DelayNodeArr;
 	vector<LogicGate*> InputObjArr;
+
+	void clear() {
+		ObjTree.clear();
+		DelayNodeArr.clear();
+		InputObjArr.clear();
+	}
 };
 
 class LogicGate {
@@ -27,13 +33,26 @@ protected:
 		}
 	}
 
+	void toggleDebugMode(ObjectStore* obj, unsigned Mode) {
+		for (int i = 0; i < obj->ObjTree.size(); i++) {//Avoid Duplicates
+			if (obj->ObjTree[i] == this) {
+				return;
+			}
+		}
+		obj->ObjTree.push_back(this);
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->DebugModeLevel = Mode;
+			ObjList[i]->toggleDebugMode(obj, Mode);
+		}
+	}
+
 	void findSpecialNodes(ObjectStore* DelayNodes) { //Return a list of Delay Nodes and save it into an array		
 		for (int i = 0; i < DelayNodes->DelayNodeArr.size(); i++) {
 			if (DelayNodes->DelayNodeArr[i] == this && this->FundamentalGateName != "DELAY") {
-				cout << "Warning: Circular Dependency" << endl;
+				if(DebugModeLevel>1)cout << "Warning: Circular Dependency (from Special Nodes Function)" << endl;
 				return;
 			}else if (DelayNodes->DelayNodeArr[i] == this && this->FundamentalGateName == "DELAY") {
-				cout << "Hit a Delay node, stopped searching" << endl;
+				if (DebugModeLevel>2)cout << "Hit a Delay node, stopped searching" << endl;
 				return;
 			}
 		}
@@ -50,6 +69,7 @@ protected:
 		return;
 	}
 
+	
 private:
 
 	vector<string> ObjNames;
@@ -79,7 +99,7 @@ private:
 	}
 	int DELAY(pair<int, int> inputvalue) { //always hold the data from input for 1 tick, then release it to output in the next tick
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		cout << "sleeping..." << endl; //FundamentalGateName = "DELAY"
+		if (DebugModeLevel>3)cout << "sleeping..." << endl; //FundamentalGateName = "DELAY"
 		return inputvalue.first;
 	}
 
@@ -87,7 +107,11 @@ private:
 
 public:
 
+	unsigned DebugModeLevel = 0;
+
 	vector<LogicGate*> ObjList;
+
+	vector<LogicGate*> ObjReceiverList;
 
 	string Name = "";
 	string FundamentalGateName = "";
@@ -107,6 +131,7 @@ public:
 	}
 
 	void call() {
+
 		ObjListSize = (int)this->ObjList.size();
 
 		this->ObjNames.clear();
@@ -124,9 +149,21 @@ public:
 
 	void clear() {
 		this->Output = {};
-		for (int i = 0; i < ObjList.size(); i++) {
-			ObjList[i]->clear();
 
+		for (int j = 0; j < ObjList.size(); j++) {
+			if (ObjList[j] == this && this->FundamentalGateName != "DELAY") {
+				if(DebugModeLevel>0)cout << "Warning: Circular Dependency" << endl;
+				return;
+			}
+			else if (ObjList[j] == this && this->FundamentalGateName == "DELAY") {
+				if (DebugModeLevel> 1)cout << "Hit a Delay node, stopped searching" << endl;
+				return;
+			}
+		}
+		for (int i = 0; i < ObjList.size(); i++) {
+			if (ObjList[i] != this && this->Output.size() != 0) {
+				ObjList[i]->clear();
+			}
 			ObjList[i]->Output = {};
 			ObjList[i]->Input = {};
 			ObjList[i]->CalculatedInput = {};
@@ -180,13 +217,49 @@ public:
 	void Called() { //to summarize calculations from lower objects
 		GotCalled++;
 
+		vector<LogicGate*> RecurObj; vector<LogicGate*> NotRecurObj; //Obj that repeats (Don't call at the end), vice versa.
+
 		for (int i = 0; i < ObjList.size(); i++) {
-			ObjList[i]->call(); //Recursive calling into the hierarchy
+			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//Check if the objects to call exist in the ObjReceiverList, if so, DON'T CALL
+				if (this->ObjList[i]->Name == this->ObjReceiverList[j]->Name) {
+					if(DebugModeLevel>0)cout << "Warning: Circular Dependency - exterminating this call from object " << this->Name << " when calling (retrieving data from) " << this->ObjReceiverList[j]->Name << endl;
+					RecurObj.push_back(this->ObjList[i]);
+				}
+			}
+		}
+		//Put elements from ObjList to NotRecurObj, EXCEPT the objects that also appears from RecurObj.
+		for (int i = 0; i < ObjList.size(); i++) {
+			for (int j = 0; j < RecurObj.size(); j++) {
+				if (RecurObj[j] == ObjList[i])goto skip;
+			}
+			NotRecurObj.push_back(ObjList[i]);
+		skip:;
+		}
+		
 
-			this->ObjNames.push_back(ObjList[i]->Name);//Get ObjNames down from the hierarchy, put into this-> ObjNames array.
+		for (int i = 0; i < NotRecurObj.size(); i++) {
+			if(DebugModeLevel>3)cout << "NOT REPEATED OBJs: " << NotRecurObj[i]->Name << ", ";
+		}if(DebugModeLevel>3)cout << endl;
 
-			for (int j = 0; j < this->ObjList[i]->Output.size(); j++) {//Get Fundamental Gates result from their Output down from the hierarchy, put into this-> Output array
-				this->Output.push_back(ObjList[i]->Output[j]);
+		for (int i = 0; i < NotRecurObj.size(); i++) {
+
+			//For every object you call, you give that object yourself and the objects that you call.
+			NotRecurObj[i]->ObjReceiverList.push_back(this); //passing itself(this) to that targeting object
+			for (int j = 0; j < NotRecurObj.size(); j++) { //passing objects from this->ObjList to that targeting object
+				NotRecurObj[i]->ObjReceiverList.push_back(NotRecurObj[j]);
+			}
+			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//passing objects from this->ObjReceiverList to that targeting object
+				NotRecurObj[i]->ObjReceiverList.push_back(this->ObjReceiverList[j]);
+			}
+			if (DebugModeLevel>3)cout << "CALL!?" << endl;
+			NotRecurObj[i]->call(); //Recursive calling into the hierarchy
+
+			
+
+			this->ObjNames.push_back(NotRecurObj[i]->Name);//Get ObjNames down from the hierarchy, put into this-> ObjNames array.
+
+			for (int j = 0; j < NotRecurObj[i]->Output.size(); j++) {//Get Fundamental Gates result from their Output down from the hierarchy, put into this-> Output array
+				this->Output.push_back(NotRecurObj[i]->Output[j]);
 			}
 		}
 
@@ -256,6 +329,25 @@ public:
 		}
 		cout << endl << "==============" << endl;
 	}
+
+	//TODO Search from DELAY node, ends at beginning or at DELAY nodes.
+	//TODO clear the ObjList from ALL DELAY nodes (cut the tie)
+	void recurDelayBranches(ObjectStore* Branches) {
+		for (int i = 0; i < Branches->ObjTree.size(); i++) {//Stop at Delay node or at the beginning or at itself
+			if (Branches->ObjTree[i] == this) {
+				//Branches->ObjTree.push_back(this);
+				return;
+			}
+			else if (this->FundamentalGateName == "DELAY") {
+				//Branches->ObjTree.push_back(this);
+				return;
+			}
+		}
+		Branches->ObjTree.push_back(this);
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->recurDelayBranches(Branches);
+		}
+	}
 };
 
 class SplitGate :LogicGate {
@@ -270,6 +362,8 @@ private:
 
 	vector<vector<LogicGate*>> OverallObjArr;
 
+	vector<vector<LogicGate*>> DelayNodeBranches;
+
 public:
 	SplitGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
 		Obj = ObjGate;
@@ -279,6 +373,36 @@ public:
 		this->findSpecialNodes(&DelayNodes);
 		DelayNodeArr = DelayNodes.DelayNodeArr;
 		InputNodeArr = DelayNodes.InputObjArr;
+
+		
+		ObjectStore DelayBranch;
+
+		this->recurDelayBranches(&DelayBranch);//From the end
+		DelayNodeBranches.push_back(DelayBranch.ObjTree);
+		DelayBranch.ObjTree.clear();
+		
+		for (int i = 0; i < DelayNodeArr.size(); i++) { //From DELAY nodes.
+			DelayNodeArr[i]->recurDelayBranches(&DelayBranch);
+			DelayNodeBranches.push_back(DelayBranch.ObjTree);
+			DelayBranch.ObjTree.clear();
+		}
+		
+		//TODO while loop to generate all branches from all DELAY nodes and also from the end.
+
+		
+	}
+
+	void printBranches() {
+		cout << "All Branches: (" << DelayNodeBranches.size() << " branches)" << endl << "{" << endl;;
+
+		for (int i = 0; i < DelayNodeBranches.size(); i++) {
+			cout << "	{" << endl;
+			for (int j = 0; j < DelayNodeBranches[i].size(); j++) {
+				cout << "		" << i << "." << j << ": " << DelayNodeBranches[i][j]->Name << "-" << DelayNodeBranches[i][j]->FundamentalGateName << endl;
+			}
+			cout << "	}" << endl;
+		}
+		cout << "}" << endl;
 	}
 
 	void printSpecialNodes() {
@@ -300,12 +424,12 @@ private:
 
 	vector<LogicGate*> CurrentObjArr;
 
+	ObjectStore objtree;
+
 public:
 	UseGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
 		Obj = ObjGate;
 		//cout << "ObjGate.ObjListSize = " << ObjGate.ObjListSize << endl;
-
-		ObjectStore objtree;
 
 		this->recurObjFunc(&objtree);
 		CurrentObjArr = objtree.ObjTree;
@@ -313,6 +437,12 @@ public:
 
 	void call() {
 		Obj->call();
+	}
+
+	void toggleDebugMode_Connected(unsigned Mode) {
+		objtree.clear();
+		Obj->DebugModeLevel = Mode;
+		this->toggleDebugMode(&objtree, Mode);
 	}
 
 	//Make a Function to not go through the hierarchy normally, and detect circular dependancies.
