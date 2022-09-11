@@ -165,7 +165,7 @@ public:
 				ObjList[i]->clear();
 			}
 			ObjList[i]->Output = {};
-			ObjList[i]->Input = {};
+			ObjList[i]->Input = {2,2};
 			ObjList[i]->CalculatedInput = {};
 			ObjList[i]->CalculatedInputPair = {};
 		}
@@ -235,7 +235,6 @@ public:
 			NotRecurObj.push_back(ObjList[i]);
 		skip:;
 		}
-		
 
 		for (int i = 0; i < NotRecurObj.size(); i++) {
 			if(DebugModeLevel>3)cout << "NOT REPEATED OBJs: " << NotRecurObj[i]->Name << ", ";
@@ -253,8 +252,6 @@ public:
 			}
 			if (DebugModeLevel>3)cout << "CALL!?" << endl;
 			NotRecurObj[i]->call(); //Recursive calling into the hierarchy
-
-			
 
 			this->ObjNames.push_back(NotRecurObj[i]->Name);//Get ObjNames down from the hierarchy, put into this-> ObjNames array.
 
@@ -279,7 +276,16 @@ public:
 				CalculatedInputPair.second = CalculatedInput[1];
 				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
 			}
-			Output = CalculatedOutput;
+			
+
+			if (Input.second == 2 && Input.first == 2) {//if the object has Manual Input, ignore the gate output
+				Output = CalculatedOutput;
+			}
+			else {
+				Output.clear();
+				Output.push_back(Input.first);
+				Output.push_back(Input.second);
+			}
 		}
 
 	}
@@ -301,7 +307,21 @@ public:
 		cout << Name; if (FundamentalGateName != "") { cout << " (" << FundamentalGateName << ")"; } cout << " // Number of Inputs: " << NumOfInputs << " // Trigger Gate Number: " << TriggerGateNum << endl;
 		cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
 		cout << Name << " Got Triggered: " << GotTriggered << endl;
-		if (Input.first == 2) {
+		if (Input.first != 2 && CalculatedInputPair.first != 2) {
+			if (CalculatedInputPair.second == 2) {
+				cout << "Input from Obj(ignored): " << CalculatedInputPair.first << endl;
+			}
+			else {
+				cout << "Input from Obj(ignored): " << CalculatedInputPair.first << " , " << CalculatedInputPair.second << endl;
+			}
+			if (Input.second == 2) {
+				cout << "Input(Manual Input): " << Input.first << endl;
+			}
+			else {
+				cout << "Input(Manual Input): " << Input.first << " , " << Input.second << endl;
+			}
+		}
+		else if (Input.first == 2) {
 			if (CalculatedInputPair.first == 2) {
 				cout << "Input: N/A" << endl;
 			}
@@ -392,8 +412,8 @@ public:
 		
 	}
 
-	void printBranches() {
-		cout << "All Branches: (" << DelayNodeBranches.size() << " branches)" << endl << "{" << endl;;
+	void printSplits() {
+		cout << "All Splits: (" << DelayNodeBranches.size() << " splits by Delay Node/s)" << endl << "{" << endl;;
 
 		for (int i = 0; i < DelayNodeBranches.size(); i++) {
 			cout << "	{" << endl;
