@@ -49,7 +49,7 @@ int main() {
 	testgate.printSplits();
 
 	obj8.call();
-
+	
 	cout << obj1.Name << "(Debug Mode): " << obj1.DebugModeLevel << endl;
 	cout << obj2.Name << "(Debug Mode): " << obj2.DebugModeLevel << endl;
 	cout << obj3.Name << "(Debug Mode): " << obj3.DebugModeLevel << endl;
@@ -63,6 +63,8 @@ int main() {
 	
 	gate.printAll();
 
+	cout << endl;
+	printVector(obj7.CalculatedOutput);
 
 
 

@@ -109,9 +109,11 @@ public:
 
 	unsigned DebugModeLevel = 0;
 
-	vector<LogicGate*> ObjList;
+	vector<LogicGate*> ObjList; //the objects to retrieve inputs from
 
-	vector<LogicGate*> ObjReceiverList;
+	vector<LogicGate*> ObjReceiverList; //remember all the objects pointed to by previous objects, to recognize whether there's circular dependency
+
+	vector<LogicGate*> ObjTargetList; //the objects to send outputs to
 
 	string Name = "";
 	string FundamentalGateName = "";
@@ -119,6 +121,8 @@ public:
 	vector<int> CalculatedOutput;
 
 	vector<vector<int>> TimedOutput = {{}};
+
+	bool IsDelay = false;
 
 	int GotCalled = 0;
 	int GotTriggered = 0;
@@ -178,32 +182,38 @@ public:
 		case 1:
 			TempFunc = &LogicGate::YES;
 			FundamentalGateName = "YES";
+			IsDelay = false;
 			NumOfInputs = 1;
 			break;
 		case 2:
 			TempFunc = &LogicGate::NOT;
 			FundamentalGateName = "NOT";
+			IsDelay = false;
 			NumOfInputs = 1;
 			break;
 		case 3:
 			TempFunc = &LogicGate::AND;
 			FundamentalGateName = "AND";
+			IsDelay = false;
 			NumOfInputs = 2;
 			break;
 		case 4:
 			TempFunc = &LogicGate::OR;
 			FundamentalGateName = "OR";
+			IsDelay = false;
 			NumOfInputs = 2;
 			break;
 		case 5:
 			TempFunc = &LogicGate::DELAY;
 			FundamentalGateName = "DELAY";
+			IsDelay = true;
 			NumOfInputs = 1;
 			break;
 		default:
 			cout << "WARNING: Wrong Function Assigned" << endl;
 			TempFunc = &LogicGate::YES;
 			FundamentalGateName = "WRONG GATE";
+			IsDelay = false;
 			break;//Nothing...
 		}
 	}
@@ -227,10 +237,13 @@ public:
 				}
 			}
 		}
-		//Put elements from ObjList to NotRecurObj, EXCEPT the objects that also appears from RecurObj.
+		
 		for (int i = 0; i < ObjList.size(); i++) {
+
+			ObjList[i]->ObjTargetList.push_back(this);//PUSH this object into the receiver's ObjTargetList
+			
 			for (int j = 0; j < RecurObj.size(); j++) {
-				if (RecurObj[j] == ObjList[i])goto skip;
+				if (RecurObj[j] == ObjList[i])goto skip; //Put elements from ObjList to NotRecurObj, EXCEPT the objects that also appears from RecurObj.
 			}
 			NotRecurObj.push_back(ObjList[i]);
 		skip:;
@@ -344,8 +357,12 @@ public:
 		}
 		cout << endl;
 		cout << "ObjList.size() = " << this->ObjList.size() << " Object Names: ";
-		for (int i = 0; i < this->ObjNames.size(); i++) {
-			cout << ObjNames[i] << " ";
+		for (int i = 0; i < this->ObjList.size(); i++) {
+			cout << ObjList[i]->Name << " ";
+		}cout << endl;
+		cout << "ObjTargetList.size() = " << this->ObjTargetList.size() << " Object Names: ";
+		for (int i = 0; i < this->ObjTargetList.size(); i++) {
+			cout << ObjTargetList[i]->Name << " ";
 		}
 		cout << endl << "==============" << endl;
 	}
