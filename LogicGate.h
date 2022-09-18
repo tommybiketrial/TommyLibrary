@@ -69,7 +69,6 @@ protected:
 		return;
 	}
 
-	
 private:
 
 	vector<string> ObjNames;
@@ -108,6 +107,8 @@ private:
 public:
 
 	unsigned DebugModeLevel = 0;
+
+	vector<int> StoredTickResults; //the stored results whenever activate() is called, store them.
 
 	vector<LogicGate*> ObjList; //the objects to retrieve inputs from
 
@@ -151,9 +152,9 @@ public:
 		Called();
 	}
 
-	void clear() {
+	void clear() { //TODO fix it! it doesn't fucking work
 		this->Output = {};
-
+		this->ObjReceiverList.clear();
 		for (int j = 0; j < ObjList.size(); j++) {
 			if (ObjList[j] == this && this->FundamentalGateName != "DELAY") {
 				if(DebugModeLevel>0)cout << "Warning: Circular Dependency" << endl;
@@ -172,6 +173,8 @@ public:
 			ObjList[i]->Input = {2,2};
 			ObjList[i]->CalculatedInput = {};
 			ObjList[i]->CalculatedInputPair = {};
+			ObjList[i]->ObjReceiverList.clear();
+			cout << this->Name << " cleared" << endl;
 		}
 	}
 
@@ -385,6 +388,53 @@ public:
 			ObjList[i]->recurDelayBranches(Branches);
 		}
 	}
+
+	//Need to clear ObjReceiverList() before calling it, in either sub-class or driver.
+	void activate() {
+
+		vector<LogicGate*> RecurObj; vector<LogicGate*> NotRecurObj; //Obj that repeats (Don't call at the end), vice versa.
+
+		for (int i = 0; i < ObjTargetList.size(); i++) {
+			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//Check if the objects to call exist in the ObjReceiverList, if so, DON'T CALL
+				if (this->ObjTargetList[i]->Name == this->ObjReceiverList[j]->Name) {
+					if (DebugModeLevel > 0)cout << "Warning: Circular Dependency - exterminating this call from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
+					return;
+				}
+			}
+		}
+		//=======================
+		for (int i = 0; i < ObjTargetList.size(); i++) {
+			ObjTargetList[i]->ObjReceiverList.push_back(this);
+		}
+		//=======================
+		for (int i = 0; i < ObjTargetList.size(); i++) {
+			ObjTargetList[i]->activate();
+		}
+
+		cout << this->Name << ", ObjTargetList: ";
+		for (int i = 0; i < ObjTargetList.size(); i++) {
+			cout << " " << ObjTargetList[i];
+		}cout << endl;
+
+		//store the result into StoredTickResults.
+	}
+};
+
+class RunGate{
+private:
+
+	vector<LogicGate*> InputList; //Gates to input from (from current obj)
+	vector<LogicGate*> OutputList; //Gates to output to (from current obj)
+
+public:
+
+	RunGate(vector<LogicGate*> inputList, vector<LogicGate*> outputList) {
+		InputList = inputList;
+		OutputList = outputList;
+	}
+
+
+
 };
 
 class SplitGate :LogicGate {
@@ -472,8 +522,14 @@ public:
 		CurrentObjArr = objtree.ObjTree;
 	}
 
-	void call() {
+	void call() {//reverse activate the list to make it available for future use.
 		Obj->call();
+	}
+
+	void activate(vector<LogicGate*> Origins) {//Use the list after call.
+		for (int i = 0; i < Origins.size(); i++) {
+			Origins[i]->activate();
+		}
 	}
 
 	void toggleDebugMode_Connected(unsigned Mode) {

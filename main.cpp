@@ -63,9 +63,27 @@ int main() {
 	
 	gate.printAll();
 
+	cout << "Clearing ObjReceiverList..." << endl;
+	
+	cout << obj6.ObjReceiverList[0]->Name << endl;
+	cout << obj6.ObjReceiverList[1]->Name << endl;
+	cout << obj6.ObjReceiverList[2]->Name << endl;
+	cout << obj6.ObjReceiverList[3]->Name << endl;
 	cout << endl;
-	printVector(obj7.CalculatedOutput);
 
+	gate.clear();
 
+	cout << obj6.ObjReceiverList[0]->Name << endl;
+	cout << obj6.ObjReceiverList[1]->Name << endl;
+	cout << obj6.ObjReceiverList[2]->Name << endl;
+	cout << obj6.ObjReceiverList[3]->Name << endl;
 
+	cout << endl;
+	printVector(gate.getResult());
+	cout << endl;
+
+	gate.activate({&obj1,&obj2});
+
+	//TODO use the currently known ObjTargetList to do it in the right order
+	//Circular Dependency :)
 }
