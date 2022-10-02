@@ -64,21 +64,18 @@ int main() {
 	gate.printAll();
 
 	cout << "Clearing ObjReceiverList..." << endl;
-	
-	cout << obj6.ObjReceiverList[0]->Name << endl;
-	cout << obj6.ObjReceiverList[1]->Name << endl;
-	cout << obj6.ObjReceiverList[2]->Name << endl;
-	cout << obj6.ObjReceiverList[3]->Name << endl;
+	for (int i = 0; i < obj6.ObjReceiverList.size(); i++) {
+		cout << obj6.ObjReceiverList[i]->Name << endl;
+	}
 	cout << endl;
-
 	gate.clear();
 
-	cout << obj6.ObjReceiverList[0]->Name << endl;
-	cout << obj6.ObjReceiverList[1]->Name << endl;
-	cout << obj6.ObjReceiverList[2]->Name << endl;
-	cout << obj6.ObjReceiverList[3]->Name << endl;
+	cout << endl << "IT SHOULD BE CLEARED BY NOW(should be empty)" << endl << "=========" << endl;
+	for (int i = 0; i < obj6.ObjReceiverList.size(); i++) {
+		cout << obj6.ObjReceiverList[i]->Name << endl;
+	}cout << "============" << endl;
 
-	cout << endl;
+	cout << endl; 
 	printVector(gate.getResult());
 	cout << endl;
 

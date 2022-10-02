@@ -23,7 +23,7 @@ protected:
 
 	void recurObjFunc(ObjectStore* obj) { //Return a whole list of objects in the hierarchy instead of just the one below
 		for (int i = 0; i < obj->ObjTree.size(); i++) {//Avoid Duplicates
-			if (obj->ObjTree[i] == this) {
+			if (obj->ObjTree[i] == this) { 
 				return;
 			}
 		}
@@ -74,10 +74,13 @@ private:
 	vector<string> ObjNames;
 
 	pair<int, int> Input = { 2,2 };
-	vector<int> Output;
 
 	vector<int> CalculatedInput;	//Put the Output into CalculatedInput because intermiediate gates and the final gate for result also function as gates
 	pair<int, int> CalculatedInputPair;
+
+	pair<int, int> DelayPair = {2,2};
+
+	vector<LogicGate*> ClearFuncCache; //Cache for clear() to clear the entire tree at once;
 
 	int NumOfInputs = NULL;
 
@@ -96,15 +99,21 @@ private:
 		if (inputvalue.first != 0) return 0;
 		else return 1;
 	}
-	int DELAY(pair<int, int> inputvalue) { //always hold the data from input for 1 tick, then release it to output in the next tick
+	int DELAY(pair<int, int> inputvalue) { //always hold the data from input, then release it to output in the next function call
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		if (DebugModeLevel>3)cout << "sleeping..." << endl; //FundamentalGateName = "DELAY"
-		return inputvalue.first;
+
+		DelayPair.second = DelayPair.first;
+		DelayPair.first = inputvalue.first;
+		
+		return DelayPair.second;
 	}
 
 
 
 public:
+
+	vector<int> Output;
 
 	unsigned DebugModeLevel = 0;
 
@@ -152,29 +161,50 @@ public:
 		Called();
 	}
 
-	void clear() { //TODO fix it! it doesn't fucking work
+	void clear() { //It requires another clear function to clear out the ClearFuncCache... TODO!!
 		this->Output = {};
 		this->ObjReceiverList.clear();
-		for (int j = 0; j < ObjList.size(); j++) {
-			if (ObjList[j] == this && this->FundamentalGateName != "DELAY") {
-				if(DebugModeLevel>0)cout << "Warning: Circular Dependency" << endl;
-				return;
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->ClearFuncCache.push_back(this);
+			for (int j = 0; j < ObjList.size(); j++) {
+				ObjList[i]->ClearFuncCache.push_back(ObjList[j]);
 			}
-			else if (ObjList[j] == this && this->FundamentalGateName == "DELAY") {
-				if (DebugModeLevel> 1)cout << "Hit a Delay node, stopped searching" << endl;
-				return;
+			for (int j = 0; j < ClearFuncCache.size(); j++) {
+				ObjList[i]->ClearFuncCache.push_back(ClearFuncCache[j]);
 			}
 		}
-		for (int i = 0; i < ObjList.size(); i++) {
-			if (ObjList[i] != this && this->Output.size() != 0) {
-				ObjList[i]->clear();
+		for (int j = 0; j < ClearFuncCache.size(); j++) {
+			for (int i = 0; i < ObjList.size(); i++) {
+				if (ClearFuncCache[j] == ObjList[i] && this->FundamentalGateName != "DELAY") {
+					if (DebugModeLevel > 0)cout << "Warning: Circular Dependency" << endl;
+					return;
+				}
+				else if (ClearFuncCache[j] == ObjList[i] && this->FundamentalGateName == "DELAY") {
+					if (DebugModeLevel > 1)cout << "Hit a Delay node, stopped searching" << endl;
+					return;
+				}
 			}
+		}
+		if (DebugModeLevel > 3) {
+			cout << this->Name << "'s ObjList:";
+			for (int i = 0; i < this->ObjList.size(); i++) {
+				cout << this->ObjList[i]->Name << ", ";
+			}cout << endl;
+			cout << this->Name << "'s ClearFuncCache:";
+			for (int i = 0; i < this->ClearFuncCache.size(); i++) {
+				cout << this->ClearFuncCache[i]->Name << ", ";
+			}cout << endl;
+			cout << "=============" << endl;
+		}
+		for (int i = 0; i < ObjList.size(); i++) {
+			
+			ObjList[i]->clear();
 			ObjList[i]->Output = {};
 			ObjList[i]->Input = {2,2};
 			ObjList[i]->CalculatedInput = {};
 			ObjList[i]->CalculatedInputPair = {};
-			ObjList[i]->ObjReceiverList.clear();
-			cout << this->Name << " cleared" << endl;
+			ObjList[i]->ObjReceiverList.clear(); if (DebugModeLevel > 3)cout << ObjList[i]->Name << " is cleared" << endl;
+			if (DebugModeLevel > 3)cout << this->Name << " is cleared(this)" << endl;
 		}
 	}
 
@@ -393,6 +423,8 @@ public:
 	void activate() {
 
 		vector<LogicGate*> RecurObj; vector<LogicGate*> NotRecurObj; //Obj that repeats (Don't call at the end), vice versa.
+
+		cout << this->Name << "Activating..." << endl;
 
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//Check if the objects to call exist in the ObjReceiverList, if so, DON'T CALL
