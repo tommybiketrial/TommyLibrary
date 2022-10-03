@@ -80,7 +80,7 @@ private:
 
 	pair<int, int> DelayPair = {2,2};
 
-	vector<LogicGate*> ClearFuncCache; //Cache for clear() to clear the entire tree at once;
+	
 
 	int NumOfInputs = NULL;
 
@@ -112,6 +112,9 @@ private:
 
 
 public:
+
+	vector<LogicGate*> ClearFuncCache; //Cache for clear() to clear the entire tree at once
+	vector<LogicGate*> ClearFuncCache_MopUp; //Cache for clearMopUp() to clear ClearFuncCache, must be called after clear()
 
 	vector<int> Output;
 
@@ -197,10 +200,57 @@ public:
 			cout << "=============" << endl;
 		}
 		for (int i = 0; i < ObjList.size(); i++) {
-			
 			ObjList[i]->clear();
+			ObjList[i]->ClearFuncCache_MopUp = {}; //to allow clearMopUp to be called next time
 			ObjList[i]->Output = {};
 			ObjList[i]->Input = {2,2};
+			ObjList[i]->CalculatedInput = {};
+			ObjList[i]->CalculatedInputPair = {};
+			ObjList[i]->ObjReceiverList.clear(); if (DebugModeLevel > 3)cout << ObjList[i]->Name << " is cleared" << endl;
+			if (DebugModeLevel > 3)cout << this->Name << " is cleared(this)" << endl;
+		}
+	}
+
+	void clearMopUp() { //It's a function to mop up the function clear() by clearing the ClearFuncCache variable
+		this->Output = {};
+		this->ObjReceiverList.clear();
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->ClearFuncCache_MopUp.push_back(this);
+			for (int j = 0; j < ObjList.size(); j++) {
+				ObjList[i]->ClearFuncCache_MopUp.push_back(ObjList[j]);
+			}
+			for (int j = 0; j < ClearFuncCache_MopUp.size(); j++) {
+				ObjList[i]->ClearFuncCache_MopUp.push_back(ClearFuncCache_MopUp[j]);
+			}
+		}
+		for (int j = 0; j < ClearFuncCache_MopUp.size(); j++) {
+			for (int i = 0; i < ObjList.size(); i++) {
+				if (ClearFuncCache_MopUp[j] == ObjList[i] && this->FundamentalGateName != "DELAY") {
+					if (DebugModeLevel > 0)cout << "Warning: Circular Dependency" << endl;
+					return;
+				}
+				else if (ClearFuncCache_MopUp[j] == ObjList[i] && this->FundamentalGateName == "DELAY") {
+					if (DebugModeLevel > 1)cout << "Hit a Delay node, stopped searching" << endl;
+					return;
+				}
+			}
+		}
+		if (DebugModeLevel > 3) {
+			cout << this->Name << "'s ObjList:";
+			for (int i = 0; i < this->ObjList.size(); i++) {
+				cout << this->ObjList[i]->Name << ", ";
+			}cout << endl;
+			cout << this->Name << "'s ClearFuncCache_MopUp:";
+			for (int i = 0; i < this->ClearFuncCache_MopUp.size(); i++) {
+				cout << this->ClearFuncCache_MopUp[i]->Name << ", ";
+			}cout << endl;
+			cout << "=============" << endl;
+		}
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->clearMopUp();
+			ObjList[i]->ClearFuncCache = {}; //to allow clear() to be called next time
+			ObjList[i]->Output = {};
+			ObjList[i]->Input = { 2,2 };
 			ObjList[i]->CalculatedInput = {};
 			ObjList[i]->CalculatedInputPair = {};
 			ObjList[i]->ObjReceiverList.clear(); if (DebugModeLevel > 3)cout << ObjList[i]->Name << " is cleared" << endl;
@@ -676,6 +726,7 @@ public:
 
 	void clear() {
 		Obj->clear();
+		Obj->clearMopUp();
 	}
 
 	string getName() {
