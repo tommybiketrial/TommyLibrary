@@ -19,8 +19,6 @@ struct ObjectStore {
 class LogicGate {
 protected:
 
-	//vector<LogicGate*> TmpObjTree;
-
 	void recurObjFunc(ObjectStore* obj) { //Return a whole list of objects in the hierarchy instead of just the one below
 		for (int i = 0; i < obj->ObjTree.size(); i++) {//Avoid Duplicates
 			if (obj->ObjTree[i] == this) { 
@@ -71,17 +69,6 @@ protected:
 
 private:
 
-	vector<string> ObjNames;
-
-	pair<int, int> Input = { 2,2 };
-
-	vector<int> CalculatedInput;	//Put the Output into CalculatedInput because intermiediate gates and the final gate for result also function as gates
-	pair<int, int> CalculatedInputPair;
-
-	pair<int, int> DelayPair = {2,2};
-
-	
-
 	int NumOfInputs = NULL;
 
 	int (LogicGate::* TempFunc) (pair<int, int> inputvalue);
@@ -112,6 +99,17 @@ private:
 
 
 public:
+
+	vector<string> ObjNames;
+
+	pair<int, int> Input = { 2,2 };
+
+	vector<int> CalculatedInput;	//Put the Output into CalculatedInput because intermiediate gates and the final gate for result also function as gates
+	pair<int, int> CalculatedInputPair;
+
+	pair<int, int> DelayPair = { 2,2 };
+
+	//============================================
 
 	vector<LogicGate*> ClearFuncCache; //Cache for clear() to clear the entire tree at once
 	vector<LogicGate*> ClearFuncCache_MopUp; //Cache for clearMopUp() to clear ClearFuncCache, must be called after clear()
@@ -591,11 +589,12 @@ class UseGate :LogicGate { //Only for non recursive repetitive use (truth table)
 private:
 	LogicGate* Obj;
 
-	vector<LogicGate*> CurrentObjArr;
-
 	ObjectStore objtree;
 
 public:
+
+	vector<LogicGate*> CurrentObjArr;
+
 	UseGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
 		Obj = ObjGate;
 		//cout << "ObjGate.ObjListSize = " << ObjGate.ObjListSize << endl;
@@ -725,8 +724,17 @@ public:
 	}
 
 	void clear() {
-		Obj->clear();
-		Obj->clearMopUp();
+		//Obj->clear();
+		//Obj->clearMopUp();
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			CurrentObjArr[i]->Output.clear();
+			CurrentObjArr[i]->Input = { 2,2 };
+			CurrentObjArr[i]->CalculatedInputPair = { 2,2 };
+			CurrentObjArr[i]->Output.clear();
+			CurrentObjArr[i]->ObjReceiverList.clear();
+			
+			if (DebugModeLevel > 3)cout << CurrentObjArr[i]->Name << " is cleared" << endl;
+		}
 	}
 
 	string getName() {

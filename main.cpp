@@ -63,70 +63,23 @@ int main() {
 	
 	gate.printAll();
 
-	cout << "Clearing ObjReceiverList..." << endl;
-	for (int i = 0; i < obj6.ObjReceiverList.size(); i++) {
-		cout << obj6.ObjReceiverList[i]->Name << endl;
+	cout << endl << "IT SHOULD BE CLEARED BY NOW(should be empty)" << endl << "=========" << endl;
+	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
+		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Input.first << "," << gate.CurrentObjArr[i]->Input.second << endl;
 	}
-	cout << endl;
-	gate.clear();
-	cout << "printing ClearFuncCache:" << endl;
-	for (int i = 0; i < obj1.ClearFuncCache.size(); i++) {
-		cout << obj1.Name << ": " << obj1.ClearFuncCache[i]->Name << endl;
-	}
-	for (int i = 0; i < obj3.ClearFuncCache.size(); i++) {
-		cout << obj3.Name << ": " << obj3.ClearFuncCache[i]->Name << endl;
-	}
-	for (int i = 0; i < obj5.ClearFuncCache.size(); i++) {
-		cout << obj5.Name << ": " << obj5.ClearFuncCache[i]->Name << endl;
-	}
-	cout << "printing ClearFuncCache_MopUp:" << endl;
-	for (int i = 0; i < obj1.ClearFuncCache_MopUp.size(); i++) {
-		cout << obj1.Name << ": " << obj1.ClearFuncCache_MopUp[i]->Name << endl;
-	}
-	for (int i = 0; i < obj3.ClearFuncCache_MopUp.size(); i++) {
-		cout << obj3.Name << ": " << obj3.ClearFuncCache_MopUp[i]->Name << endl;
-	}
-	for (int i = 0; i < obj5.ClearFuncCache_MopUp.size(); i++) {
-		cout << obj5.Name << ": " << obj5.ClearFuncCache_MopUp[i]->Name << endl;
-	}
-	cout << "#printed all ClearCache.." << endl;
-
 
 	gate.clear();
-	cout << "printing ClearFuncCache:" << endl;
-	for (int i = 0; i < obj1.ClearFuncCache.size(); i++) {
-		cout << obj1.Name << ": " << obj1.ClearFuncCache[i]->Name << endl;
-	}
-	for (int i = 0; i < obj3.ClearFuncCache.size(); i++) {
-		cout << obj3.Name << ": " << obj3.ClearFuncCache[i]->Name << endl;
-	}
-	for (int i = 0; i < obj5.ClearFuncCache.size(); i++) {
-		cout << obj5.Name << ": " << obj5.ClearFuncCache[i]->Name << endl;
-	}
-	cout << "printing ClearFuncCache_MopUp:" << endl;
-	for (int i = 0; i < obj1.ClearFuncCache_MopUp.size(); i++) {
-		cout << obj1.Name << ": " << obj1.ClearFuncCache_MopUp[i]->Name << endl;
-	}
-	for (int i = 0; i < obj3.ClearFuncCache_MopUp.size(); i++) {
-		cout << obj3.Name << ": " << obj3.ClearFuncCache_MopUp[i]->Name << endl;
-	}
-	for (int i = 0; i < obj5.ClearFuncCache_MopUp.size(); i++) {
-		cout << obj5.Name << ": " << obj5.ClearFuncCache_MopUp[i]->Name << endl;
-	}
-	cout << "#printed all ClearCache.." << endl;
-
-
 
 	cout << endl << "IT SHOULD BE CLEARED BY NOW(should be empty)" << endl << "=========" << endl;
-	for (int i = 0; i < obj6.ObjReceiverList.size(); i++) {
-		cout << obj6.ObjReceiverList[i]->Name << endl;
-	}cout << "============" << endl;
+	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
+		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Input.first << "," << gate.CurrentObjArr[i]->Input.second << endl;
+	}
 
 	cout << endl; 
 	printVector(gate.getResult());
 	cout << endl;
 
-	gate.activate({&obj1,&obj2});
+	//gate.activate({&obj1,&obj2});
 
 	//TODO use the currently known ObjTargetList to do it in the right order
 	//Circular Dependency :)
