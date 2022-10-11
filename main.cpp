@@ -63,23 +63,27 @@ int main() {
 	
 	gate.printAll();
 
-	cout << endl << "IT SHOULD BE CLEARED BY NOW(should be empty)" << endl << "=========" << endl;
-	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
-		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Input.first << "," << gate.CurrentObjArr[i]->Input.second << endl;
-	}
+
 
 	gate.clear();
-
-	cout << endl << "IT SHOULD BE CLEARED BY NOW(should be empty)" << endl << "=========" << endl;
-	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
-		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Input.first << "," << gate.CurrentObjArr[i]->Input.second << endl;
-	}
 
 	cout << endl;
 	printVector(gate.getResult());
 	cout << endl;
 
+	gate.setTick(5);
+
+	cout << endl << "=====TICK?=====" << endl;
+	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
+		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Tick << endl;
+	}
+
+	obj1.input(0);
+	obj2.input(0);
+
 	gate.activate({&obj1,&obj2});
+
+	gate.printAll();
 
 	//TODO use the currently known ObjTargetList to do it in the right order
 	//Circular Dependency :)

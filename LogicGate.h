@@ -100,6 +100,8 @@ private:
 
 public:
 
+	int Tick = 0; //Decrease as line 481 is called, when it's at 0 at that if statement, return;
+
 	vector<string> ObjNames;
 
 	pair<int, int> Input = { 2,2 };
@@ -477,20 +479,26 @@ public:
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//Check if the objects to call exist in the ObjReceiverList, if so, DON'T CALL
 				if (this->ObjTargetList[i]->Name == this->ObjReceiverList[j]->Name) {
-					if (DebugModeLevel > 0)cout << "Warning: Circular Dependency - exterminating this call from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
-					return;
+					if (Tick > 0) {
+						if (DebugModeLevel > 3)cout << "Circular Dependency(Tick == "<< Tick <<") - rolling to next tick from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
+						Tick--;
+					}
+					else if(Tick == 0) {
+						if (DebugModeLevel > 2)cout << "Circular Dependency(Tick == 0) - Exterminating this call from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
+						return;
+					}
 				}
 			}
 		}
 
-		if (DebugModeLevel > 3)cout << this->Name << ", ObjTargetList: ";
+		if (DebugModeLevel > 4)cout << this->Name << ", ObjTargetList: ";
 		for (int i = 0; i < ObjTargetList.size(); i++) {
-			if (DebugModeLevel > 3)cout << " " << ObjTargetList[i]->Name;
-		}cout << endl;
-		if (DebugModeLevel > 3)cout << this->Name << ", ObjReceiverList: ";
+			if (DebugModeLevel > 4)cout << " " << ObjTargetList[i]->Name;
+		}if (DebugModeLevel > 4)cout << endl;
+		if (DebugModeLevel > 4)cout << this->Name << ", ObjReceiverList: ";
 		for (int i = 0; i < ObjReceiverList.size(); i++) {
-			if (DebugModeLevel > 3)cout << " " << ObjReceiverList[i]->Name;
-		}cout << endl;
+			if (DebugModeLevel > 4)cout << " " << ObjReceiverList[i]->Name;
+		}if (DebugModeLevel > 4)cout << endl;
 
 		//=======================
 		for (int i = 0; i < ObjTargetList.size(); i++) {
@@ -736,6 +744,7 @@ public:
 		return Obj->CalculatedOutput;
 	}
 
+	//Clear everything other than ObjList & ObjTargetList
 	void clear() {
 		//Obj->clear();
 		//Obj->clearMopUp();
@@ -745,8 +754,31 @@ public:
 			CurrentObjArr[i]->CalculatedInputPair = { 2,2 };
 			CurrentObjArr[i]->Output.clear();
 			CurrentObjArr[i]->ObjReceiverList.clear();
+			CurrentObjArr[i]->Tick = 0;
 			
 			if (DebugModeLevel > 3)cout << CurrentObjArr[i]->Name << " is cleared" << endl;
+		}
+	}
+
+	//Default to set ticks to all Objects
+	void setTick(int NumOfTicks) {
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			CurrentObjArr[i]->Tick = NumOfTicks;
+		}
+	}
+	//When OnlyDelay is 1, only Objects of Delay Gate will be applied ticks
+	void setTick(int NumOfTicks, bool OnlyDelay) {
+		if (OnlyDelay == 1) {
+			for (int i = 0; i < CurrentObjArr.size(); i++) {
+				if (CurrentObjArr[i]->FundamentalGateName == "DELAY") {//When it's a DELAY Gate, set a tick for it
+					CurrentObjArr[i]->Tick = NumOfTicks;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < CurrentObjArr.size(); i++) {
+				CurrentObjArr[i]->Tick = NumOfTicks;
+			}
 		}
 	}
 
