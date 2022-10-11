@@ -482,19 +482,32 @@ public:
 				}
 			}
 		}
+
+		if (DebugModeLevel > 3)cout << this->Name << ", ObjTargetList: ";
+		for (int i = 0; i < ObjTargetList.size(); i++) {
+			if (DebugModeLevel > 3)cout << " " << ObjTargetList[i]->Name;
+		}cout << endl;
+		if (DebugModeLevel > 3)cout << this->Name << ", ObjReceiverList: ";
+		for (int i = 0; i < ObjReceiverList.size(); i++) {
+			if (DebugModeLevel > 3)cout << " " << ObjReceiverList[i]->Name;
+		}cout << endl;
+
 		//=======================
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			ObjTargetList[i]->ObjReceiverList.push_back(this);
+			for (int j = 0; j < ObjTargetList.size(); j++) {
+				ObjTargetList[i]->ObjReceiverList.push_back(this->ObjTargetList[j]);
+			}
+			for (int j = 0; j < ObjReceiverList.size(); j++) {
+				ObjTargetList[i]->ObjReceiverList.push_back(this->ObjReceiverList[j]);
+			}
 		}
 		//=======================
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			ObjTargetList[i]->activate();
 		}
 
-		cout << this->Name << ", ObjTargetList: ";
-		for (int i = 0; i < ObjTargetList.size(); i++) {
-			cout << " " << ObjTargetList[i];
-		}cout << endl;
+		
 
 		//store the result into StoredTickResults.
 	}

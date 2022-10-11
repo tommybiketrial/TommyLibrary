@@ -75,11 +75,11 @@ int main() {
 		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Input.first << "," << gate.CurrentObjArr[i]->Input.second << endl;
 	}
 
-	cout << endl; 
+	cout << endl;
 	printVector(gate.getResult());
 	cout << endl;
 
-	//gate.activate({&obj1,&obj2});
+	gate.activate({&obj1,&obj2});
 
 	//TODO use the currently known ObjTargetList to do it in the right order
 	//Circular Dependency :)
