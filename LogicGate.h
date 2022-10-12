@@ -42,14 +42,21 @@ protected:
 		}
 	}
 
-	void findSpecialNodes(ObjectStore* DelayNodes) { //Return a list of Delay Nodes and save it into an array		
+	//Return a list of Delay Nodes and save it into an array. If bool return true, it will not proceed to creating the graph because of circular dependency without delay node.
+	bool findSpecialNodes(ObjectStore* DelayNodes) { 
+		SplitGateMissingDelayNodeDetection--;
+		if (SplitGateMissingDelayNodeDetection < 1) {
+			ErrorMessages.push_back("ERROR: MISSING DELAY NODE, CIRCULAR DEPENDANCY");
+			if (DebugModeLevel > 0)cout << "ERROR: MISSING DELAY NODE, CIRCULAR DEPENDANCY" << endl;
+			return false;
+		}
 		for (int i = 0; i < DelayNodes->DelayNodeArr.size(); i++) {
 			if (DelayNodes->DelayNodeArr[i] == this && this->FundamentalGateName != "DELAY") {
-				if(DebugModeLevel>1)cout << "Warning: Circular Dependency (from Special Nodes Function)" << endl;
-				return;
+				if(DebugModeLevel>1)cout << "Warning: Circular Dependency (from findSpecialNodes Function)" << endl;
+				return true;
 			}else if (DelayNodes->DelayNodeArr[i] == this && this->FundamentalGateName == "DELAY") {
 				if (DebugModeLevel>2)cout << "Hit a Delay node, stopped searching" << endl;
-				return;
+				return true;
 			}
 		}
 		if (this->ObjList.size() == 0) {//When the Objlist of an object is 0, this object is an Input object
@@ -62,10 +69,12 @@ protected:
 		for (int i = 0; i < ObjList.size(); i++) {
 			ObjList[i]->findSpecialNodes(DelayNodes);
 		}
-		return;
+		return true;
 	}
 
 private:
+
+	int SplitGateMissingDelayNodeDetection = 99;
 
 	int NumOfInputs = NULL;
 
@@ -98,9 +107,13 @@ private:
 
 public:
 
-	
+	vector<vector<int>> OutputList; //list of outputs for each tick
 
 	int Tick = 0; //Decrease as line 481 is called, when it's at 0 at that if statement, return;
+
+	vector<string> ErrorMessages;
+
+	//=======================================
 
 	vector<string> ObjNames;
 
@@ -473,8 +486,6 @@ public:
 	void activate() {
 		this->GotActivated++;
 
-		vector<LogicGate*> RecurObj; vector<LogicGate*> NotRecurObj; //Obj that repeats (Don't call at the end), vice versa.
-
 		if (DebugModeLevel > 3)cout << this->Name << "Activating..." << endl;
 
 		for (int i = 0; i < ObjTargetList.size(); i++) {
@@ -512,6 +523,39 @@ public:
 			}
 		}
 		//=======================
+
+		if (TriggerGateNum != NULL) { //When the intermiediate object is assigned a gate function
+
+			for (int i = 0; i < this->Output.size(); i++) {
+				CalculatedInput.push_back(this->Output[i]);
+			}
+			//cout << "Call Calculating, CalculatedInput.size(): " << CalculatedInput.size() << endl;
+			if (CalculatedInput.size() == 1) {
+				CalculatedInputPair.first = CalculatedInput[0];
+				CalculatedInputPair.second = 2;
+				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
+			}
+			if (CalculatedInput.size() >= 2) {
+				CalculatedInputPair.first = CalculatedInput[0];
+				CalculatedInputPair.second = CalculatedInput[1];
+				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
+			}
+
+
+			if (Input.second == 2 && Input.first == 2) {//if the object has Manual Input, ignore the gate output
+				Output = CalculatedOutput;
+			}
+			else {
+				Output.clear();
+				Output.push_back(Input.first);
+				Output.push_back(Input.second);
+			}
+
+			this->OutputList.push_back(Output);
+		}
+
+		//======================
+
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			ObjTargetList[i]->activate();
 		}
@@ -560,7 +604,6 @@ public:
 		DelayNodeArr = DelayNodes.DelayNodeArr;
 		InputNodeArr = DelayNodes.InputObjArr;
 
-		
 		ObjectStore DelayBranch;
 
 		this->recurDelayBranches(&DelayBranch);//From the end
