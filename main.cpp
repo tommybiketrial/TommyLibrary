@@ -1,4 +1,3 @@
-#include <iostream>
 #include "TommyHeader.h"
 
 using namespace TommyLogic;
@@ -36,13 +35,8 @@ int main() {
 	obj7.input({ &obj6 });
 	obj8.input({ &obj7 });
 
-	obj1.input(0);
-	obj2.input(0);
-
-	obj6.input(1, 1);
-
 	UseGate gate(&obj8);
-	gate.toggleDebugMode_Connected(4);
+	gate.toggleDebugMode_Connected(0);
 
 	SplitGate testgate(&obj8);
 	testgate.printSpecialNodes();
@@ -50,33 +44,15 @@ int main() {
 
 	obj8.call();
 	
-	cout << obj1.Name << "(Debug Mode): " << obj1.DebugModeLevel << endl;
-	cout << obj2.Name << "(Debug Mode): " << obj2.DebugModeLevel << endl;
-	cout << obj3.Name << "(Debug Mode): " << obj3.DebugModeLevel << endl;
-	cout << obj4.Name << "(Debug Mode): " << obj4.DebugModeLevel << endl;
-	cout << obj5.Name << "(Debug Mode): " << obj5.DebugModeLevel << endl;
-	cout << obj6.Name << "(Debug Mode): " << obj6.DebugModeLevel << endl;
-	cout << obj7.Name << "(Debug Mode): " << obj7.DebugModeLevel << endl;
-	cout << obj8.Name << "(Debug Mode): " << obj8.DebugModeLevel << endl;
-
-	cout << endl << "============EVERYTHING EXECUTED==========" << endl << endl;
-	
-	gate.printAll();
-
-
-
 	gate.clear();
-
-	cout << endl;
-	printVector(gate.getResult());
-	cout << endl;
 
 	gate.setTick(5);
 
+	/*
 	cout << endl << "=====TICK?=====" << endl;
 	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
 		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Tick << endl;
-	}
+	}*/
 
 	obj1.input(0);
 	obj2.input(0);
@@ -85,6 +61,4 @@ int main() {
 
 	gate.printAll();
 
-	//TODO use the currently known ObjTargetList to do it in the right order
-	//Circular Dependency :)
 }

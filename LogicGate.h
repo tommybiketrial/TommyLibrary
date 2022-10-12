@@ -2,8 +2,6 @@
 
 class LogicGate; struct ObjectStore;
 
-//TODO Split the tree to avoid circular dependency at the point of DELAY nodes.
-
 struct ObjectStore {
 	vector<LogicGate*> ObjTree;
 	vector<LogicGate*> DelayNodeArr;
@@ -100,6 +98,8 @@ private:
 
 public:
 
+	
+
 	int Tick = 0; //Decrease as line 481 is called, when it's at 0 at that if statement, return;
 
 	vector<string> ObjNames;
@@ -137,6 +137,7 @@ public:
 
 	bool IsDelay = false;
 
+	int GotActivated = 0;
 	int GotCalled = 0;
 	int GotTriggered = 0;
 	int ObjListSize = 0;
@@ -255,6 +256,24 @@ public:
 			ObjList[i]->CalculatedInputPair = {};
 			ObjList[i]->ObjReceiverList.clear(); if (DebugModeLevel > 3)cout << ObjList[i]->Name << " is cleared" << endl;
 			if (DebugModeLevel > 3)cout << this->Name << " is cleared(this)" << endl;
+		}
+	}
+
+	//it's for generating the graph for the class SplitGate
+	void recurDelayBranches(ObjectStore* Branches) {
+		for (int i = 0; i < Branches->ObjTree.size(); i++) {//Stop at Delay node or at the beginning or at itself
+			if (Branches->ObjTree[i] == this) {
+				//Branches->ObjTree.push_back(this);
+				return;
+			}
+			else if (this->FundamentalGateName == "DELAY") {
+				//Branches->ObjTree.push_back(this);
+				return;
+			}
+		}
+		Branches->ObjTree.push_back(this);
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->recurDelayBranches(Branches);
 		}
 	}
 
@@ -401,8 +420,13 @@ public:
 
 	void print() {
 		cout << Name; if (FundamentalGateName != "") { cout << " (" << FundamentalGateName << ")"; } cout << " // Number of Inputs: " << NumOfInputs << " // Trigger Gate Number: " << TriggerGateNum << endl;
-		cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
-		cout << Name << " Got Triggered: " << GotTriggered << endl;
+		//cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
+		//cout << Name << " Got Triggered: " << GotTriggered << endl;
+		cout << "ObjTargetList.size() = " << this->ObjTargetList.size() << " Object Names: ";
+		for (int i = 0; i < this->ObjTargetList.size(); i++) {
+			cout << ObjTargetList[i]->Name << " ";
+		}
+		cout << endl << Name << " Got Activated: " << GotActivated << endl;
 		if (Input.first != 2 && CalculatedInputPair.first != 2) {
 			if (CalculatedInputPair.second == 2) {
 				cout << "Input from Obj(ignored): " << CalculatedInputPair.first << endl;
@@ -443,38 +467,15 @@ public:
 		for (int i = 0; i < this->ObjList.size(); i++) {
 			cout << ObjList[i]->Name << " ";
 		}cout << endl;
-		cout << "ObjTargetList.size() = " << this->ObjTargetList.size() << " Object Names: ";
-		for (int i = 0; i < this->ObjTargetList.size(); i++) {
-			cout << ObjTargetList[i]->Name << " ";
-		}
-		cout << endl << "==============" << endl;
+		cout << "==============" << endl;
 	}
 
-	//TODO Search from DELAY node, ends at beginning or at DELAY nodes.
-	//TODO clear the ObjList from ALL DELAY nodes (cut the tie)
-	void recurDelayBranches(ObjectStore* Branches) {
-		for (int i = 0; i < Branches->ObjTree.size(); i++) {//Stop at Delay node or at the beginning or at itself
-			if (Branches->ObjTree[i] == this) {
-				//Branches->ObjTree.push_back(this);
-				return;
-			}
-			else if (this->FundamentalGateName == "DELAY") {
-				//Branches->ObjTree.push_back(this);
-				return;
-			}
-		}
-		Branches->ObjTree.push_back(this);
-		for (int i = 0; i < ObjList.size(); i++) {
-			ObjList[i]->recurDelayBranches(Branches);
-		}
-	}
-
-	//Need to clear ObjReceiverList() before calling it, in either sub-class or driver.
 	void activate() {
+		this->GotActivated++;
 
 		vector<LogicGate*> RecurObj; vector<LogicGate*> NotRecurObj; //Obj that repeats (Don't call at the end), vice versa.
 
-		cout << this->Name << "Activating..." << endl;
+		if (DebugModeLevel > 3)cout << this->Name << "Activating..." << endl;
 
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//Check if the objects to call exist in the ObjReceiverList, if so, DON'T CALL
@@ -515,9 +516,6 @@ public:
 			ObjTargetList[i]->activate();
 		}
 
-		
-
-		//store the result into StoredTickResults.
 	}
 };
 
@@ -555,7 +553,7 @@ private:
 public:
 	SplitGate(LogicGate* ObjGate) :LogicGate(*ObjGate) {
 		Obj = ObjGate;
-		cout << "ObjGate.ObjListSize = " << ObjGate->ObjListSize << endl;
+		if (DebugModeLevel > 1)cout << "ObjGate.ObjListSize = " << ObjGate->ObjListSize << " (from class SplitGate)" << endl;
 
 		ObjectStore DelayNodes;
 		this->findSpecialNodes(&DelayNodes);
@@ -574,8 +572,6 @@ public:
 			DelayNodeBranches.push_back(DelayBranch.ObjTree);
 			DelayBranch.ObjTree.clear();
 		}
-		
-		//TODO while loop to generate all branches from all DELAY nodes and also from the end.
 
 		
 	}
@@ -639,8 +635,6 @@ public:
 		Obj->DebugModeLevel = Mode;
 		this->toggleDebugMode(&objtree, Mode);
 	}
-
-	//Make a Function to not go through the hierarchy normally, and detect circular dependancies.
 
 	void checkNumOfInputs() {
 		int Counter = 0;
