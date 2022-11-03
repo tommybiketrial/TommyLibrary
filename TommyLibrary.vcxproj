@@ -150,6 +150,8 @@
     <ClInclude Include="ReciprocalsOfPrimes.h" />
     <ClInclude Include="RegexWrapper.h" />
     <ClInclude Include="TommyArrayHelp.h" />
+    <ClInclude Include="TommyCounter.h" />
+    <ClInclude Include="TommyFunctions.cpp" />
     <ClInclude Include="TommyHeader.h" />
     <ClInclude Include="TommyLogic.h" />
     <ClInclude Include="TommyTimer.h" />

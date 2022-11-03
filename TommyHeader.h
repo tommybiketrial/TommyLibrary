@@ -14,6 +14,7 @@ using std::cin; using std::cout; using std::endl;
 using std::string;
 using std::pair;
 
+#include "TommyCounter.h"
 #include "Fibonacci.h"
 #include "TommyTimer.h"
 #include "Multidimensional_Core.h"
@@ -23,3 +24,7 @@ using std::pair;
 #include "RegexWrapper.h"
 #include "CircularDependency.h"
 #include "TommyLogic.h"
+
+
+
+#include "TommyFunctions.cpp"

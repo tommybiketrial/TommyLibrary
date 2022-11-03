@@ -109,7 +109,7 @@ public:
 
 	vector<vector<int>> OutputList; //list of outputs for each tick
 
-	int Tick = 0; //Decrease as line 481 is called, when it's at 0 at that if statement, return;
+	int Tick = 0; //Decrease as activate() is called, when it's at 0 at that if statement, return;
 
 	vector<string> ErrorMessages;
 
@@ -408,11 +408,15 @@ public:
 
 			if (Input.second == 2 && Input.first == 2) {//if the object has Manual Input, ignore the gate output
 				Output = CalculatedOutput;
+				CalculatedInput.clear();//Remove the CalculatedInput data(it's temporary)
+				CalculatedOutput.clear();//Remove the CalculatedInput data(it's temporary)
 			}
 			else {
 				Output.clear();
 				Output.push_back(Input.first);
 				Output.push_back(Input.second);
+				CalculatedInput.clear();//Remove the CalculatedInput data(it's temporary)
+				CalculatedOutput.clear();//Remove the CalculatedInput data(it's temporary)
 			}
 		}
 
@@ -476,6 +480,15 @@ public:
 			cout << Output[i] << " ";
 		}
 		cout << endl;
+		cout << "Output from each tick: ";
+		for (int i = 0; i < OutputList.size(); i++) {
+			for (int j = 0; j < Output.size(); j++) {
+				cout << OutputList[i][j] << " ";
+			}
+			cout << "| ";
+		}
+
+		cout << endl;
 		cout << "ObjList.size() = " << this->ObjList.size() << " Object Names: ";
 		for (int i = 0; i < this->ObjList.size(); i++) {
 			cout << ObjList[i]->Name << " ";
@@ -521,6 +534,7 @@ public:
 			for (int j = 0; j < ObjReceiverList.size(); j++) {
 				ObjTargetList[i]->ObjReceiverList.push_back(this->ObjReceiverList[j]);
 			}
+			ObjTargetList[i]->ObjReceiverList = removeVectorDuplicates(ObjTargetList[i]->ObjReceiverList);
 		}
 		//=======================
 
@@ -534,21 +548,24 @@ public:
 				CalculatedInputPair.first = CalculatedInput[0];
 				CalculatedInputPair.second = 2;
 				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
-			}
-			if (CalculatedInput.size() >= 2) {
+			}else if (CalculatedInput.size() >= 2) {
 				CalculatedInputPair.first = CalculatedInput[0];
 				CalculatedInputPair.second = CalculatedInput[1];
 				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
 			}
 
 
-			if (Input.second == 2 && Input.first == 2) {//if the object has Manual Input, ignore the gate output
+			if (Input.second == 2 && Input.first == 2) {//if it's intermiediate gate, put CalculatedOutput into Output
 				Output = CalculatedOutput;
+				CalculatedInput.clear();//Remove the CalculatedInput data(it's temporary)
+				CalculatedOutput.clear();//Remove the CalculatedInput data(it's temporary)
 			}
-			else {
+			else {									//if the object has Manual Input, ignore the gate output
 				Output.clear();
 				Output.push_back(Input.first);
 				Output.push_back(Input.second);
+				CalculatedInput.clear();//Remove the CalculatedInput data(it's temporary)
+				CalculatedOutput.clear();//Remove the CalculatedInput data(it's temporary)
 			}
 
 			this->OutputList.push_back(Output);
@@ -560,6 +577,13 @@ public:
 			ObjTargetList[i]->activate();
 		}
 
+	}
+
+	vector<LogicGate*> removeVectorDuplicates(vector<LogicGate*> v) {
+		std::sort(v.begin(), v.end());
+		auto last = std::unique(v.begin(), v.end());
+		v.erase(last, v.end());
+		return v;
 	}
 };
 
