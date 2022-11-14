@@ -123,6 +123,9 @@ public:
 	vector<pair<int,int>> InputArr = {}; //instead of a single input, every system tick, the input node/s will be called and will be called down the arrays.
 	vector<LogicGate*> ObjInputList; //store the input obj list of the system in every objects in the system. for example if the input nodes are obj1 obj2, they are stored here.
 
+	bool DelayNodeSkipCheck = false;
+	bool FirstDelayNode = false;
+
 	vector<int> CalculatedInput;	//Put the Output into CalculatedInput because intermiediate gates and the final gate for result also function as gates
 	pair<int, int> CalculatedInputPair;
 
@@ -144,6 +147,8 @@ public:
 	vector<LogicGate*> ObjReceiverList; //remember all the objects pointed to by previous objects, to recognize whether there's circular dependency
 
 	vector<LogicGate*> ObjTargetList; //the objects to send outputs to
+
+	vector<LogicGate*> AllObj; // All the obj in the system, from CurrentObjArr from UseGate class.
 
 	string Name = "";
 	string FundamentalGateName = "";
@@ -515,8 +520,18 @@ public:
 
 	void activate() {
 		this->GotActivated++;
-		//take delay node's tick as ref, to activate input node/s 
+
 		if (DebugModeLevel > 3)cout << this->Name << "Activating..." << endl;
+
+		if (this->FundamentalGateName == "DELAY" && DelayNodeSkipCheck == false) { //if it's false, check if this delay node is the first delay node in the system
+			for (int i = 0; i < this->AllObj.size(); i++) {
+				if (AllObj[i]->FirstDelayNode == false) {
+					this->FirstDelayNode = true;
+				}else {
+					this->DelayNodeSkipCheck = true;
+				}
+			}
+		}
 
 		for (int x = 0; x < ObjInputList.size(); x++) {
 			if (this == ObjInputList[x]) {
@@ -535,7 +550,7 @@ public:
 					if (Tick > 0) {
 						if (DebugModeLevel > 3)cout << "Circular Dependency(Tick == "<< Tick <<") - rolling to next tick from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
 						Tick--;
-						if (this->FundamentalGateName == "DELAY") { //it only works for a single delay node, if there are more delay nodes, we will have to find the first delay node and only use it.
+						if (this->FundamentalGateName == "DELAY" && this->FirstDelayNode == true) { //it only works for a single delay node, if there are more delay nodes, we will have to find the first delay node and only use it.
 							cout << "ACTIVATE INPUT NODES!! (remember to overload activate() and calculate the InputArr in order)" << endl;
 							for (int i = 0; i < ObjInputList.size(); i++) {
 								ObjInputList[i]->activate();
@@ -730,6 +745,9 @@ public:
 		for (int i = 0; i < CurrentObjArr.size(); i++) {
 			for (int j = 0; j < Origins.size(); j++) {
 				CurrentObjArr[i]->ObjInputList.push_back(Origins[j]); //Fill up the ObjInputList of every obj in the system with the input objects
+			}
+			for (int j = 0; j < CurrentObjArr.size(); j++) {
+				CurrentObjArr[i]->AllObj.push_back(CurrentObjArr[j]); //Fill up the AllObj of every obj in the system with all the obj in the system
 			}
 		}
 		

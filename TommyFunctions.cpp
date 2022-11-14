@@ -69,6 +69,23 @@ void TommyLogic_Circular_Dependency_Test() {
 		}cout << endl;
 	}
 	*/
+
+	/* print whether other objs have received the CurrentObjArr list
+	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
+		cout << gate.CurrentObjArr[i]->Name << ": ";
+		for (int j = 0; j < gate.CurrentObjArr[i]->AllObj.size(); j++) {
+			cout << gate.CurrentObjArr[i]->AllObj[j]->Name << " ";
+		}cout << endl;
+	}
+	*/
+
+	/* print to check the FirstDelayNode conditions for all gates
+	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
+		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->FirstDelayNode;
+		cout << endl;
+	}
+	*/
+	
 }
 
 void TommyLogic_Legacy_Non_Circular_Depending_Test() {
