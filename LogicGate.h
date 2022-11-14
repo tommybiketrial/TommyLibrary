@@ -110,6 +110,7 @@ public:
 	vector<vector<int>> OutputList; //list of outputs for each tick
 
 	int Tick = 0; //Decrease as activate() is called, when it's at 0 at that if statement, return;
+	int InputTick = 0; //Increases as activate() of the first Delay Node is called, for activating the input node/s
 
 	vector<string> ErrorMessages;
 
@@ -118,6 +119,9 @@ public:
 	vector<string> ObjNames;
 
 	pair<int, int> Input = { 2,2 };
+
+	vector<pair<int,int>> InputArr = {}; //instead of a single input, every system tick, the input node/s will be called and will be called down the arrays.
+	vector<LogicGate*> ObjInputList; //store the input obj list of the system in every objects in the system. for example if the input nodes are obj1 obj2, they are stored here.
 
 	vector<int> CalculatedInput;	//Put the Output into CalculatedInput because intermiediate gates and the final gate for result also function as gates
 	pair<int, int> CalculatedInputPair;
@@ -435,6 +439,19 @@ public:
 		this->ObjListSize = (int)this->ObjList.size();
 	}
 
+	void inputarr(vector<vector<int>> InputArray) {
+		for (int i = 0; i < InputArray.size(); i++) {
+			InputArr.push_back({ InputArray[i][0], InputArray[i][1]});
+		}
+		if (DebugModeLevel > 0) {
+			cout << this->Name << "'s InputArr is";
+			for (int i = 0; i < InputArr.size(); i++) {
+				cout << " " << InputArr[i].first << " " << InputArr[i].second << " |";
+			}
+			cout << endl;
+		}
+	}
+
 	void print() {
 		cout << Name; if (FundamentalGateName != "") { cout << " (" << FundamentalGateName << ")"; } cout << " // Number of Inputs: " << NumOfInputs << " // Trigger Gate Number: " << TriggerGateNum << endl;
 		//cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
@@ -482,7 +499,7 @@ public:
 		cout << endl;
 		cout << "Output from each tick: ";
 		for (int i = 0; i < OutputList.size(); i++) {
-			for (int j = 0; j < Output.size(); j++) {
+			for (int j = 0; j < OutputList[i].size(); j++) {
 				cout << OutputList[i][j] << " ";
 			}
 			cout << "| ";
@@ -498,8 +515,19 @@ public:
 
 	void activate() {
 		this->GotActivated++;
-
+		//take delay node's tick as ref, to activate input node/s 
 		if (DebugModeLevel > 3)cout << this->Name << "Activating..." << endl;
+
+		for (int x = 0; x < ObjInputList.size(); x++) {
+			if (this == ObjInputList[x]) {
+				cout << "INPUT LIST MATCHES" << endl;
+				if (this->InputTick < this->InputArr.size()) {
+					this->Input = this->InputArr[InputTick];
+					if (DebugModeLevel > 4)cout << this->Name << "'s InputTick is " << InputTick << ", current input is " << Input.first << "," << Input.second << endl;
+					InputTick++;
+				}
+			}
+		}
 
 		for (int i = 0; i < ObjTargetList.size(); i++) {
 			for (int j = 0; j < this->ObjReceiverList.size(); j++) {//Check if the objects to call exist in the ObjReceiverList, if so, DON'T CALL
@@ -507,6 +535,12 @@ public:
 					if (Tick > 0) {
 						if (DebugModeLevel > 3)cout << "Circular Dependency(Tick == "<< Tick <<") - rolling to next tick from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
 						Tick--;
+						if (this->FundamentalGateName == "DELAY") { //it only works for a single delay node, if there are more delay nodes, we will have to find the first delay node and only use it.
+							cout << "ACTIVATE INPUT NODES!! (remember to overload activate() and calculate the InputArr in order)" << endl;
+							for (int i = 0; i < ObjInputList.size(); i++) {
+								ObjInputList[i]->activate();
+							}
+						}
 					}
 					else if(Tick == 0) {
 						if (DebugModeLevel > 2)cout << "Circular Dependency(Tick == 0) - Exterminating this call from object " << this->Name << " when trying to activate " << this->ObjReceiverList[j]->Name << endl;
@@ -692,6 +726,13 @@ public:
 	}
 
 	void activate(vector<LogicGate*> Origins) {//Use the list after call.
+		
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			for (int j = 0; j < Origins.size(); j++) {
+				CurrentObjArr[i]->ObjInputList.push_back(Origins[j]); //Fill up the ObjInputList of every obj in the system with the input objects
+			}
+		}
+		
 		for (int i = 0; i < Origins.size(); i++) {
 			Origins[i]->activate();
 		}

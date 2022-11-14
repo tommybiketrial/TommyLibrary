@@ -53,12 +53,22 @@ void TommyLogic_Circular_Dependency_Test() {
 		cout << gate.CurrentObjArr[i]->Name << ": " << gate.CurrentObjArr[i]->Tick << endl;
 	}
 
-	obj1.input(0);
-	obj2.input(0);
-
+	obj1.inputarr({ {0,1},{1,0},{0,1} });
+	obj2.inputarr({ {1,0},{0,1},{1,0} });
 	gate.activate({ &obj1,&obj2 });
 
 	gate.printAll();
+
+
+
+	/* print whether other objs have received the Input Obj list
+	for (int i = 0; i < gate.CurrentObjArr.size(); i++) {
+		cout << gate.CurrentObjArr[i]->Name << ": ";
+		for (int j = 0; j < gate.CurrentObjArr[i]->ObjInputList.size(); j++) {
+			cout << gate.CurrentObjArr[i]->ObjInputList[j]->Name << " ";
+		}cout << endl;
+	}
+	*/
 }
 
 void TommyLogic_Legacy_Non_Circular_Depending_Test() {
@@ -106,3 +116,4 @@ void TommyCounter_Test() {
 	cout << CountingTest.CountCommas() << endl;
 	cout << CountingTest.getNumberOfEnters();
 }
+
