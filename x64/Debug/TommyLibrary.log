@@ -15,4 +15,5 @@ C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsO
 C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(140,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(31,66): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
 C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(43,44): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyFunctions.cpp(151,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   TommyLibrary.vcxproj -> C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\x64\Debug\TommyLibrary.exe

@@ -3,6 +3,7 @@
 int main() {
 	
 	//TommyCounter_Test();
-	TommyLogic_Circular_Dependency_Test();
+	//TommyLogic_Circular_Dependency_Test();
+	FunctionalGate_Test();
 
 }

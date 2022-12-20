@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="CircularDependency.h" />
     <ClInclude Include="Fibonacci.h" />
+    <ClInclude Include="FunctionalGate.h" />
     <ClInclude Include="LogicGate.h" />
     <ClInclude Include="MachineLearning.h" />
     <ClInclude Include="Multidimensional_Core.h" />

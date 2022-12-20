@@ -535,11 +535,13 @@ public:
 
 		for (int x = 0; x < ObjInputList.size(); x++) {
 			if (this == ObjInputList[x]) {
-				cout << "INPUT LIST MATCHES" << endl;
+				if (DebugModeLevel > 4) cout << "INPUT LIST MATCHES" << endl;
 				if (this->InputTick < this->InputArr.size()) {
 					this->Input = this->InputArr[InputTick];
 					if (DebugModeLevel > 4)cout << this->Name << "'s InputTick is " << InputTick << ", current input is " << Input.first << "," << Input.second << endl;
 					InputTick++;
+				}else {
+					if (DebugModeLevel > 4)cout << this->Name << " has NO MORE input (default to the last input InputArr[" << InputTick-1 << "] )." << endl;
 				}
 			}
 		}

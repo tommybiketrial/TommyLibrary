@@ -24,7 +24,7 @@ using std::pair;
 #include "RegexWrapper.h"
 #include "CircularDependency.h"
 #include "TommyLogic.h"
-
+#include "FunctionalGate.h"
 
 
 #include "TommyFunctions.cpp"

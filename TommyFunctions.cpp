@@ -25,7 +25,8 @@ void TommyLogic_Circular_Dependency_Test() {
 	obj5.assignFunctions(3);//AND
 	obj6.assignFunctions(4);//OR
 	obj7.assignFunctions(5);//DELAY
-	obj8.assignFunctions(1);//YES
+	obj8.assignFunctions(5);//DELAY
+	obj9.assignFunctions(1);//YES
 
 	obj3.input({ &obj1 });
 	obj4.input({ &obj3,&obj7 });
@@ -33,15 +34,16 @@ void TommyLogic_Circular_Dependency_Test() {
 	obj6.input({ &obj4,&obj5 });
 	obj7.input({ &obj6 });
 	obj8.input({ &obj7 });
+	obj9.input({ &obj8 });
 
-	UseGate gate(&obj8);
+	UseGate gate(&obj9);
 	gate.toggleDebugMode_Connected(5);
 
-	SplitGate testgate(&obj8);
+	SplitGate testgate(&obj9);
 	testgate.printSpecialNodes();
 	testgate.printSplits();
 
-	obj8.call();
+	obj9.call();
 
 	gate.clear();
 
@@ -134,3 +136,20 @@ void TommyCounter_Test() {
 	cout << CountingTest.getNumberOfEnters();
 }
 
+void FunctionalGate_Test() {
+
+	FunctionalGate obj1("g1"), obj2("g2"), obj3("g3");
+
+	obj1.input({ &obj2 });
+	obj2.input({ &obj3 });
+	obj3.input({ &obj1 });
+
+	obj1.setLoopLimit(5);
+
+	obj1.run();
+
+	for (int i = obj1.CachGates.size()-1; i >= 0 ; i--) {
+		obj1.CachGates[i]->print_looped_results();
+	}
+
+}
