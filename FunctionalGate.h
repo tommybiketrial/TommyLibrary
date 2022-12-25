@@ -46,17 +46,20 @@ public:
 	int Looped = 0;
 
 	vector<FunctionalGate*> PrevGates;
-	vector<FunctionalGate*> LoopPrevGates; //Store PrevGates looped results
+	vector<FunctionalGate> LoopPrevGates; //Store PrevGates looped results
 
 	vector<FunctionalGate*> NextGates;
 
 	vector<FunctionalGate*> CachGates;
+
+	vector<FunctionalGate> ArchivedGates; //Store Archived Versions of this Gate.
 
 	vector<int> TheArray;
 
 	FunctionalGate(string gate_name) {
 		Name = gate_name;
 	}
+	FunctionalGate(const FunctionalGate& other) : Name(other.Name),Selector(other.Selector), PrevGates(other.PrevGates), LoopPrevGates(other.LoopPrevGates),NextGates(other.NextGates),CachGates(other.CachGates),ArchivedGates(other.ArchivedGates),ArrayInput(other.ArrayInput),ArrayOutput(other.ArrayOutput),TheArray(other.TheArray) {}
 
 	void input(vector<FunctionalGate*> next_gates) {
 		NextGates = next_gates;
@@ -87,8 +90,6 @@ public:
 				else if (j == NextGates[i]->PrevGates.size() && NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); }
 			}
 
-			NextGates[i]->LoopPrevGates.push_back(this);
-
 			if (NextGates[i]->CachGates.size() == 0) {//need to do this otherwise after this if statement (the for loop) will never get activated since size would be 0
 				NextGates[i]->CachGates.push_back(this);
 				for (int j = 0; j < this->CachGates.size(); j++) {
@@ -118,8 +119,11 @@ public:
 
 		number_of_calls++;
 
-		//Calculate based on the functions. E.x. Current object uses both manual input and PrevGate->ArrayOutput to calculate its own ArrayOutput.
+		//ARCHIVE THE this->GATE;
+		FunctionalGate tmp(*this);
+		ArchivedGates.push_back(tmp);
 
+		//Calculate based on the functions. E.x. Current object uses both manual input and PrevGate->ArrayOutput to calculate its own ArrayOutput.
 		callFunc(Selector,ArrayInput);
 
 		for (int i = 0; i < NextGates.size(); i++) {
@@ -129,7 +133,7 @@ public:
 				else if (j == NextGates[i]->PrevGates.size() && NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); }
 			}
 			
-			NextGates[i]->LoopPrevGates.push_back(this);
+			NextGates[i]->LoopPrevGates.push_back(tmp);
 
 			if (NextGates[i]->CachGates.size() == 0) {//need to do this otherwise after this if statement (the for loop) will never get activated since size would be 0
 				NextGates[i]->CachGates.push_back(this);
@@ -224,17 +228,22 @@ public:
 		}cout << endl;
 		cout << "LoopPrevGates ArrayOutput/s: (could be inputs for this gate)" << endl;
 		for (int i = 0; i < this->LoopPrevGates.size(); i++) {
-			cout << LoopPrevGates[i]->Name << ": ";
-			for (int j = 0; j < this->LoopPrevGates[i]->ArrayOutput.size(); j++) {
-				cout << this->LoopPrevGates[i]->ArrayOutput[j] << " | ";
+			cout << LoopPrevGates[i].Name << ": ";
+			for (int j = 0; j < this->LoopPrevGates[i].ArrayOutput.size(); j++) {
+				cout << this->LoopPrevGates[i].ArrayOutput[j] << " | ";
 			}cout << endl;
 		}cout << endl;
 		cout << "this->ArrayOutput: ";
 		for (int i = 0; i < this->ArrayOutput.size(); i++) {
 			cout << this->ArrayOutput[i] << " | ";
 		}cout << endl;
+		cout << "this->ArchivedGate: " << endl;
+		for (int i = 0; i < this->ArchivedGates.size(); i++) {
+			for (int j = 0; j < this->ArchivedGates[i].ArrayOutput.size(); j++) {
+				cout << this->ArchivedGates[i].ArrayOutput[j] << " | ";
+			}cout << endl;
+		}
 		cout << "==========================" << endl << endl;
 	}
 
 };
-
