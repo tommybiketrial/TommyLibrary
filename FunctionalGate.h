@@ -13,6 +13,28 @@ private:
 		return v;
 	}
 
+	vector<int> addition_vector_of_vectors(vector<vector<int>> input) {
+		vector<int> result;
+		if (input.size() == 0)return result;
+		int size = 0;
+		for (const auto& inner_vec : input) {
+			size = std::max(size, (int)inner_vec.size());
+		}
+		for (auto& inner_vec : input) {// Pad the shorter vectors with zeros
+			if (inner_vec.size() < size) {
+				inner_vec.resize(size, 0);  // pad with zeros
+			}
+		}
+		for (int j = 0; j < input[0].size(); j++) {
+			int tmp = 0;
+			for (int i = 0; i < input.size(); i++) {
+				tmp += input[i][j];
+			}
+			result.push_back(tmp);
+		}
+		return result;
+	}
+
 public:
 
 	string Name = "";
@@ -49,6 +71,42 @@ public:
 
 	void setLoopLimit(int CallLimit_input) {
 		LoopLimit = CallLimit_input;
+	}
+
+	void initialize() {
+		for (int i = 0; i < CachGates.size(); i++) {
+			if (CachGates[i] == this && Looped < LoopLimit) { Looped++; goto SkipCheck; }
+			else if (CachGates[i] == this && Looped >= LoopLimit) return;
+		}
+	SkipCheck:
+
+		for (int i = 0; i < NextGates.size(); i++) {
+			if (NextGates[i]->PrevGates.size() == 0) { NextGates[i]->PrevGates.push_back(this); } //need to do this otherwise the next line (the for loop) will never get activated since size would be 0
+			for (int j = 0; j < NextGates[i]->PrevGates.size(); j++) {//check no duplicates while pushing back
+				if (NextGates[i]->PrevGates[j] == this) { continue; }
+				else if (j == NextGates[i]->PrevGates.size() && NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); }
+			}
+
+			NextGates[i]->LoopPrevGates.push_back(this);
+
+			if (NextGates[i]->CachGates.size() == 0) {//need to do this otherwise after this if statement (the for loop) will never get activated since size would be 0
+				NextGates[i]->CachGates.push_back(this);
+				for (int j = 0; j < this->CachGates.size(); j++) {
+					NextGates[i]->CachGates.push_back(this->CachGates[j]);
+				}
+			}
+			for (int j = 0; j < NextGates[i]->CachGates.size(); j++) {//check no duplicates while pushing back
+				if (NextGates[i]->CachGates[j] == this) { continue; }
+				else if (j == NextGates[i]->CachGates.size() && NextGates[i]->CachGates[j] != this) {
+					NextGates[i]->CachGates.push_back(this);
+					for (int j = 0; j < this->CachGates.size(); j++) {
+						NextGates[i]->CachGates.push_back(this->CachGates[j]);
+					}
+				}
+			}
+
+			NextGates[i]->initialize();
+		}
 	}
 
 	void run() {
@@ -94,16 +152,14 @@ public:
 	}
 
 	void callFunc(int selector, vector<int> array_input) { //manipulate the array using switch statements, input variables to select the statements to use. (1st variable = selector, 2nd variable = array variable)
-		int tmp = 0;
-		vector<int> tmp_add;
+		vector<vector<int>> tmp;
 		switch (selector) {
 		case 1: //simple array addition //LATER
+			tmp.push_back(array_input);
 			for (int i = 0; i < this->PrevGates.size(); i++) {
-				for (int j = 0; j < this->PrevGates[i]->ArrayOutput.size(); j++) {
-					tmp += this->PrevGates[i]->ArrayOutput[j];
-				}
-				tmp_add.push_back(tmp);
+				tmp.push_back(PrevGates[i]->ArrayOutput);
 			}
+			this->ArrayOutput = addition_vector_of_vectors(tmp);
 		break;
 		default:
 		break;
@@ -111,7 +167,7 @@ public:
 	}
 
 	void print() {
-		cout << "Gate ["<< this->Name <<"] properties:" << endl;
+		cout << "Gate ["<< this->Name <<"] selector " << Selector << " properties:" << endl;
 		cout << "number_of_calls = " << number_of_calls << endl;
 		cout << "Time/s Looped = " << Looped << endl;
 		cout << "PrevGates: ";
@@ -146,7 +202,7 @@ public:
 	}
 
 	void print_looped_results() {
-		cout << "Gate [" << this->Name << "] properties:" << endl;
+		cout << "Gate [" << this->Name << "] selector " << Selector << " properties:" << endl;
 		cout << "number_of_calls = " << number_of_calls << endl;
 		cout << "Time/s Looped = " << Looped << endl;
 		cout << "PrevGates: ";

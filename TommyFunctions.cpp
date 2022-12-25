@@ -144,8 +144,14 @@ void FunctionalGate_Test() {
 	obj2.input({ &obj3 });
 	obj3.input({ &obj1 });
 
-	obj1.setLoopLimit(5);
+	obj1.input(1,{1,2,3,4});
+	obj2.input(1,{3,2,1});
+	obj3.input(1,{0,0,0,0,0,999,1});
 
+	obj1.setLoopLimit(0);
+	obj1.initialize();
+
+	obj1.setLoopLimit(5);
 	obj1.run();
 
 	for (int i = obj1.CachGates.size()-1; i >= 0 ; i--) {
