@@ -1,2 +1,147 @@
 ﻿  main.cpp
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\TommyTimer.h(41,14): error C4996: 'ctime': This function or variable may be unsafe. Consider using ctime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyCounter.h(21,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyTimer.h(69,80): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyTimer.h(160,29): warning C4244: 'argument': conversion from 'unsigned __int64' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Multidimensional_Core.h(15,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Multidimensional_Core.h(22,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Multidimensional_Core.h(26,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Multidimensional_Core.h(35,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Multidimensional_Core.h(42,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Multidimensional_Core.h(47,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyArrayHelp.h(65,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(21,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(27,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(33,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(39,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(53,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(69,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(193,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(195,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(198,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(202,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(203,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(216,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(220,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(225,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(240,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(242,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(245,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(249,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(250,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(263,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(267,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(272,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(286,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(297,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(356,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(357,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(365,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(369,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(376,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(380,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(384,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(387,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(395,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(402,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(448,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(453,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(465,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(501,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(506,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(507,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(515,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(527,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(536,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(539,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(549,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(550,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(557,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(571,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(575,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(580,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(582,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(585,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(594,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(627,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(688,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(700,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(702,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(712,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(716,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(747,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(748,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(751,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(756,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(769,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(797,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(798,16): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(830,16): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(841,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(845,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(850,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(860,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(873,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(887,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(894,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\LogicGate.h(901,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(41,23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(85,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(88,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(147,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(154,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\CircularDependency.h(54,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(5,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(18,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(82,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(84,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(94,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(98,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(104,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(106,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(14,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(54,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(58,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(60,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(110,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(116,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(118,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(128,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(132,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(136,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(147,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(162,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(164,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(173,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(177,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(181,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(196,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(200,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(204,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(209,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(213,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(215,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(220,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(231,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(235,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(239,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(244,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(248,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(250,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(255,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(259,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate.h(260,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\FunctionalGate_Helper.h(27,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\SudokuSolver.h(247,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyFunctions.cpp(54,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyFunctions.cpp(239,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyFunctions.cpp(244,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyFunctions.cpp(267,21): warning C4018: '<': signed/unsigned mismatch
+  TommyLibrary.vcxproj -> C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\Debug\TommyLibrary.exe

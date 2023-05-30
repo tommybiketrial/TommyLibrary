@@ -6,11 +6,41 @@ private:
 	//DEBUG VARIABLES (for now)
 	int number_of_calls = 0;
 	
+	void callFunc(int selector, vector<int> array_input) { //manipulate the array using switch statements, input variables to select the statements to use. (1st variable = selector, 2nd variable = array variable)
+		vector<vector<int>> tmp;
+		switch (selector) {
+		case 1: //simple array addition //LATER
+			tmp.push_back(array_input);
+			for (int i = 0; i < this->PrevGates.size(); i++) {
+				tmp.push_back(PrevGates[i]->ArrayOutput);
+			}
+			this->ArrayOutput = addition_vector_of_vectors(tmp);
+			break;
+		case 8:
+			this->ArrayOutput = TheArray;
+			TheArray = ArrayInput;
+			break;
+		default:
+			break;
+		}
+	}
+
 	vector<FunctionalGate*> removeVectorDuplicates(vector<FunctionalGate*> v) {
 		std::sort(v.begin(), v.end());
 		auto last = std::unique(v.begin(), v.end());
 		v.erase(last, v.end());
 		return v;
+	}
+
+	vector<FunctionalGate*> addVector_Unique(vector<vector<FunctionalGate*>> vv) {
+		for (std::vector<FunctionalGate*>& inner : vv) { // Remove duplicates from each vector using std::unique
+			inner.erase(std::unique(inner.begin(), inner.end()), inner.end());
+		}
+		std::vector<FunctionalGate*> merged;
+		for (const std::vector<FunctionalGate*>& inner : vv) { // Append all the vectors in v into a single vector
+			merged.insert(merged.end(), inner.begin(), inner.end());
+		}
+		return merged;
 	}
 
 	vector<int> addition_vector_of_vectors(vector<vector<int>> input) {
@@ -59,7 +89,7 @@ public:
 	FunctionalGate(string gate_name) {
 		Name = gate_name;
 	}
-	FunctionalGate(const FunctionalGate& other) : Name(other.Name),Selector(other.Selector), PrevGates(other.PrevGates), LoopPrevGates(other.LoopPrevGates),NextGates(other.NextGates),CachGates(other.CachGates),ArchivedGates(other.ArchivedGates),ArrayInput(other.ArrayInput),ArrayOutput(other.ArrayOutput),TheArray(other.TheArray) {}
+	FunctionalGate(const FunctionalGate& other) : Name(other.Name),Selector(other.Selector), PrevGates(other.PrevGates), LoopPrevGates(other.LoopPrevGates),NextGates(other.NextGates),CachGates(other.CachGates),ArchivedGates(other.ArchivedGates),ArrayInput(other.ArrayInput),ArrayOutput(other.ArrayOutput),TheArray(other.TheArray) {} //deep copy constructor
 
 	void input(vector<FunctionalGate*> next_gates) {
 		NextGates = next_gates;
@@ -85,9 +115,12 @@ public:
 
 		for (int i = 0; i < NextGates.size(); i++) {
 			if (NextGates[i]->PrevGates.size() == 0) { NextGates[i]->PrevGates.push_back(this); } //need to do this otherwise the next line (the for loop) will never get activated since size would be 0
-			for (int j = 0; j < NextGates[i]->PrevGates.size(); j++) {//check no duplicates while pushing back
-				if (NextGates[i]->PrevGates[j] == this) { continue; }
-				else if (j == NextGates[i]->PrevGates.size() && NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); }
+			for (int j = 0; j < NextGates[i]->PrevGates.size(); j++) {//check no duplicates while pushing back, push all NextGates into the PrevGates of the NextGates while avoiding pushing the ones that are already there.
+
+
+				if (NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); }//j == NextGates[i]->PrevGates.size() && 
+				
+				
 			}
 
 			if (NextGates[i]->CachGates.size() == 0) {//need to do this otherwise after this if statement (the for loop) will never get activated since size would be 0
@@ -98,10 +131,10 @@ public:
 			}
 			for (int j = 0; j < NextGates[i]->CachGates.size(); j++) {//check no duplicates while pushing back
 				if (NextGates[i]->CachGates[j] == this) { continue; }
-				else if (j == NextGates[i]->CachGates.size() && NextGates[i]->CachGates[j] != this) {
+				else if (j == NextGates[i]->CachGates.size() && NextGates[i]->CachGates[j] != this) {//
 					NextGates[i]->CachGates.push_back(this);
-					for (int j = 0; j < this->CachGates.size(); j++) {
-						NextGates[i]->CachGates.push_back(this->CachGates[j]);
+					for (int k = 0; k < this->CachGates.size(); k++) {
+						NextGates[i]->CachGates.push_back(this->CachGates[k]);
 					}
 				}
 			}
@@ -130,7 +163,7 @@ public:
 			if (NextGates[i]->PrevGates.size() == 0) { NextGates[i]->PrevGates.push_back(this); } //need to do this otherwise the next line (the for loop) will never get activated since size would be 0
 			for (int j = 0; j < NextGates[i]->PrevGates.size(); j++) {//check no duplicates while pushing back
 				if (NextGates[i]->PrevGates[j] == this) { continue; }
-				else if (j == NextGates[i]->PrevGates.size() && NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); }
+				else if (j == NextGates[i]->PrevGates.size() && NextGates[i]->PrevGates[j] != this) { NextGates[i]->PrevGates.push_back(this); } //
 			}
 			
 			NextGates[i]->LoopPrevGates.push_back(tmp);
@@ -143,10 +176,10 @@ public:
 			} 
 			for (int j = 0; j < NextGates[i]->CachGates.size(); j++) {//check no duplicates while pushing back
 				if (NextGates[i]->CachGates[j] == this) { continue; }
-				else if (j == NextGates[i]->CachGates.size() && NextGates[i]->CachGates[j] != this) {
+				else if (j == NextGates[i]->CachGates.size() && NextGates[i]->CachGates[j] != this) {//
 					NextGates[i]->CachGates.push_back(this);
-					for (int j = 0; j < this->CachGates.size(); j++) {
-						NextGates[i]->CachGates.push_back(this->CachGates[j]);
+					for (int k = 0; k < this->CachGates.size(); k++) {
+						NextGates[i]->CachGates.push_back(this->CachGates[k]);
 					}
 				}
 			}
@@ -155,23 +188,8 @@ public:
 		}
 	}
 
-	void callFunc(int selector, vector<int> array_input) { //manipulate the array using switch statements, input variables to select the statements to use. (1st variable = selector, 2nd variable = array variable)
-		vector<vector<int>> tmp;
-		switch (selector) {
-		case 1: //simple array addition //LATER
-			tmp.push_back(array_input);
-			for (int i = 0; i < this->PrevGates.size(); i++) {
-				tmp.push_back(PrevGates[i]->ArrayOutput);
-			}
-			this->ArrayOutput = addition_vector_of_vectors(tmp);
-		break;
-		default:
-		break;
-		}
-	}
-
 	void print() {
-		cout << "Gate ["<< this->Name <<"] selector " << Selector << " properties:" << endl;
+		cout << "Gate ["<< this->Name <<"] (selector " << Selector << ") properties:" << endl;
 		cout << "number_of_calls = " << number_of_calls << endl;
 		cout << "Time/s Looped = " << Looped << endl;
 		cout << "PrevGates: ";
@@ -206,7 +224,7 @@ public:
 	}
 
 	void print_looped_results() {
-		cout << "Gate [" << this->Name << "] selector " << Selector << " properties:" << endl;
+		cout << "Gate [" << this->Name << "] (selector " << Selector << ") properties:" << endl;
 		cout << "number_of_calls = " << number_of_calls << endl;
 		cout << "Time/s Looped = " << Looped << endl;
 		cout << "PrevGates: ";
@@ -237,7 +255,7 @@ public:
 		for (int i = 0; i < this->ArrayOutput.size(); i++) {
 			cout << this->ArrayOutput[i] << " | ";
 		}cout << endl;
-		cout << "this->ArchivedGate: " << endl;
+		cout << "this->ArchivedGate: (history of this gate)" << endl;
 		for (int i = 0; i < this->ArchivedGates.size(); i++) {
 			for (int j = 0; j < this->ArchivedGates[i].ArrayOutput.size(); j++) {
 				cout << this->ArchivedGates[i].ArrayOutput[j] << " | ";

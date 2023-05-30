@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\FunctionalGate">
+      <UniqueIdentifier>{488fe7ba-ed64-4e8a-8390-5904a188e0ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,6 +63,21 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="FunctionalGate.h">
+      <Filter>Header Files\FunctionalGate</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionalGate_Helper.h">
+      <Filter>Header Files\FunctionalGate</Filter>
+    </ClInclude>
+    <ClInclude Include="InfInt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiny.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LitreGallonFuelCalculator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SudokuSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -145,17 +145,22 @@
     <ClInclude Include="CircularDependency.h" />
     <ClInclude Include="Fibonacci.h" />
     <ClInclude Include="FunctionalGate.h" />
+    <ClInclude Include="FunctionalGate_Helper.h" />
+    <ClInclude Include="LitreGallonFuelCalculator.h" />
     <ClInclude Include="LogicGate.h" />
     <ClInclude Include="MachineLearning.h" />
     <ClInclude Include="Multidimensional_Core.h" />
+    <ClInclude Include="Profiny.h" />
     <ClInclude Include="ReciprocalsOfPrimes.h" />
     <ClInclude Include="RegexWrapper.h" />
+    <ClInclude Include="SudokuSolver.h" />
     <ClInclude Include="TommyArrayHelp.h" />
     <ClInclude Include="TommyCounter.h" />
     <ClInclude Include="TommyFunctions.cpp" />
     <ClInclude Include="TommyHeader.h" />
     <ClInclude Include="TommyLogic.h" />
     <ClInclude Include="TommyTimer.h" />
+    <ClInclude Include="InfInt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

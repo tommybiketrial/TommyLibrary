@@ -1,18 +1,23 @@
 ﻿  main.cpp
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\TommyTimer.h(2,1): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\main.cpp : message : see previous definition of '_CRT_SECURE_NO_WARNINGS'
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\TommyTimer.h(65,80): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyTimer.h(2,1): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\main.cpp : message : see previous definition of '_CRT_SECURE_NO_WARNINGS'
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyTimer.h(65,80): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
           with
           [
               _Rep=__int64
           ]
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\TommyTimer.h(127,18): warning C4244: '=': conversion from 'unsigned __int64' to 'int', possible loss of data
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\LogicGate.h(372,66): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\LogicGate.h(384,44): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\ReciprocalsOfPrimes.h(39,23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\ReciprocalsOfPrimes.h(112,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyTimer.h(156,29): warning C4244: 'argument': conversion from 'unsigned __int64' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(41,23): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\ReciprocalsOfPrimes.h(140,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(31,66): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyLogic.h(43,44): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\TommyFunctions.cpp(239,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  Previous IPDB was built with incompatible compiler, fall back to full compilation.
-  All 126 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB not found, fall back to full compilation.
+  All 333 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  TommyLibrary.vcxproj -> D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\x64\Release\TommyLibrary.exe
+  TommyLibrary.vcxproj -> C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\x64\Release\TommyLibrary.exe

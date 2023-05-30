@@ -38,7 +38,11 @@ void TommyTimer::checkTime() {
 }
 
 void TommyTimer::PrintTimeStampOfTheEnd() {
-	printf(std::ctime(&end_time));
+	//printf(std::ctime(&end_time));
+	std::time_t end_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	std::tm local_tm;
+	localtime_s(&local_tm, &end_time);
+	std::cout << std::put_time(&local_tm, "%c") << std::endl;
 }
 
 //=======================================================================
