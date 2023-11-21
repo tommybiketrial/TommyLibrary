@@ -2,7 +2,7 @@
 
 using namespace std;
 
-class VehicleFuelConsumptionPerTrip {
+class VehicleFuelConsumptionCalc {
 private:
     double MPG = 0;
     double LitreOfFuelConsumed = 0;

@@ -9,5 +9,9 @@ int main() {
 	//LitreGallonFuelCalculator();
 	//solveSudoku();
 	//generateSudoku();
-	generateThenSolveSudoku();
+	//generateThenSolveSudoku();
+	//run_exprtk_examples();
+	//exprtk_SFML_LimitApproximator_practice();
+	//exprtk_SFML_simpleplot_practice();
+	exprtk_SFML_recursiveplot_logistic_map();
 }

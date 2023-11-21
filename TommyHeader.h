@@ -19,6 +19,12 @@
 #include <iterator>
 #include <cstdlib>
 #include <ctime>
+#include <cstdio>
+#include <cmath>
+#include <deque>
+#include <cstddef>
+#include <numeric>
+
 
 #ifdef _WIN32
 #define NOMINMAX
@@ -36,6 +42,13 @@ using std::string;
 using std::pair;
 using std::set;
 
+#include <SFML/Graphics.hpp>
+#include "InfInt.h"
+#include "Profiny.h"
+#include "exprtk.hpp"
+
+#include "SFML_graph_wrapper.h"
+#include "TommyTools.h"
 #include "TommyCounter.h"
 #include "Fibonacci.h"
 #include "TommyTimer.h"
@@ -48,9 +61,13 @@ using std::set;
 #include "TommyLogic.h"
 #include "FunctionalGate.h"
 #include "FunctionalGate_Helper.h"
-#include "InfInt.h"
-#include "Profiny.h"
 #include "LitreGallonFuelCalculator.h"
 #include "SudokuSolver.h"
+#include "Calculus_1.h"
+#include "exprtk_examples.h"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 #include "TommyFunctions.cpp"

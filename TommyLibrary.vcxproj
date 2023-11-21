@@ -78,6 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Tools\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Tools\SFML-2.6.1-windows-vc17-64-bit.zip\SFML-2.6.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -116,10 +118,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,7 +146,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Calculus_1.h" />
     <ClInclude Include="CircularDependency.h" />
+    <ClInclude Include="exprtk.hpp" />
+    <ClInclude Include="exprtk_examples.h" />
     <ClInclude Include="Fibonacci.h" />
     <ClInclude Include="FunctionalGate.h" />
     <ClInclude Include="FunctionalGate_Helper.h" />
@@ -153,6 +160,7 @@
     <ClInclude Include="Profiny.h" />
     <ClInclude Include="ReciprocalsOfPrimes.h" />
     <ClInclude Include="RegexWrapper.h" />
+    <ClInclude Include="SFML_graph_wrapper.h" />
     <ClInclude Include="SudokuSolver.h" />
     <ClInclude Include="TommyArrayHelp.h" />
     <ClInclude Include="TommyCounter.h" />
@@ -161,6 +169,7 @@
     <ClInclude Include="TommyLogic.h" />
     <ClInclude Include="TommyTimer.h" />
     <ClInclude Include="InfInt.h" />
+    <ClInclude Include="TommyTools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

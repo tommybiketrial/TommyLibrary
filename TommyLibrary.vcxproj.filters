@@ -16,6 +16,18 @@
     <Filter Include="Header Files\FunctionalGate">
       <UniqueIdentifier>{488fe7ba-ed64-4e8a-8390-5904a188e0ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Calculus">
+      <UniqueIdentifier>{08fd9e4d-cc5e-4d62-9176-c371226a8aab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\exprtk">
+      <UniqueIdentifier>{c6c8cde4-da96-4978-9ee7-8b6a4c5a208e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SFML">
+      <UniqueIdentifier>{6c9490a2-c595-41c4-85e0-c00ab30096ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TommyTools">
+      <UniqueIdentifier>{879926f5-71a3-4d27-9ad1-2ff9427d53af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,6 +91,21 @@
     </ClInclude>
     <ClInclude Include="SudokuSolver.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Calculus_1.h">
+      <Filter>Header Files\Calculus</Filter>
+    </ClInclude>
+    <ClInclude Include="exprtk.hpp">
+      <Filter>Header Files\exprtk</Filter>
+    </ClInclude>
+    <ClInclude Include="exprtk_examples.h">
+      <Filter>Header Files\exprtk</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML_graph_wrapper.h">
+      <Filter>Header Files\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="TommyTools.h">
+      <Filter>Header Files\TommyTools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -33,3 +33,9 @@
 
 # Visual Studio Generated
 *.vs
+
+#directories
+x64/
+.vs/
+Debug
+.git/
