@@ -1,5 +1,0 @@
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\x64\Debug\TommyLibrary.exe
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\x64\Debug\TommyLibrary.pdb
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\x64\Debug\TommyLibrary.exe
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\x64\Debug\TommyLibrary.exe
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\x64\Debug\TommyLibrary.exe

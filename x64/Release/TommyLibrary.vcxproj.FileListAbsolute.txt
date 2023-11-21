@@ -1,2 +1,0 @@
-D:\Cloud\OneDrive\My Saved Files\VS C++\TommyLib\LIB\TommyLibrary\x64\Release\TommyLibrary.exe
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\TommyLib\TommyLibrary\x64\Release\TommyLibrary.exe
